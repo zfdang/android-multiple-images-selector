@@ -14,6 +14,7 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
 
     private final List<ImageItem> mValues;
     private final OnImageGridInteractionListener mListener;
+    private static final String TAG = "ImageRecyclerViewAdapter";
 
     public ImageRecyclerViewAdapter(List<ImageItem> items, OnImageGridInteractionListener listener) {
         mValues = items;
@@ -23,15 +24,16 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.mis_image_recyclerview, parent, false);
+                .inflate(R.layout.mis_image_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        ImageItem ii = mValues.get(position);
+        holder.mItem = ii;
+        holder.mIdView.setText(ii.id);
+        holder.mContentView.setText(ii.content);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,8 +61,10 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.image_id);
+            assert mIdView != null;
+            mContentView = (TextView) view.findViewById(R.id.image_content);
+            assert mContentView != null;
         }
 
         @Override
