@@ -56,12 +56,13 @@ public class ImageGridFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.mis_main_content, container, false);
+        View view = inflater.inflate(R.layout.fragment_selector_content, container, false);
+        View rview = view.findViewById(R.id.image_recycerview);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+        if (rview instanceof RecyclerView) {
+            Context context = rview.getContext();
+            RecyclerView recyclerView = (RecyclerView) rview;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {

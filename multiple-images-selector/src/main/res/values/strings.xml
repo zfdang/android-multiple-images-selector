@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Multiple-Images-Selector</string>
+    <string name="select_folder_all">所有图片</string>
 </resources>

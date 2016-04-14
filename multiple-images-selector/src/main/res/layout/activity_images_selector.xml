@@ -6,10 +6,10 @@
     <include
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        layout="@layout/mis_custom_actionbar" />
+        layout="@layout/selector_custom_actionbar" />
 
     <FrameLayout
-        android:id="@+id/image_grid"
+        android:id="@+id/selector_content"
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -11,11 +11,11 @@ public class ImagesSelectActivity extends AppCompatActivity implements OnImageGr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_images_select);
+        setContentView(R.layout.activity_images_selector);
 
         ImageGridFragment gridFragment = ImageGridFragment.newInstance(3);
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.image_grid, gridFragment).commit();
+        fm.beginTransaction().replace(R.id.selector_content, gridFragment).commit();
     }
 
     @Override

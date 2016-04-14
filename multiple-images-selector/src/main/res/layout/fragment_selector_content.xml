@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/image_recycerview"
+        android:name="com.zfdang.multiple_images_selector.ImageGridFragment"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        tools:context="com.zfdang.multiple_images_selector.ImageGridFragment"
+        tools:listitem="@layout/recyclerview_image_item"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:clickable="true"
+        android:background="#cc000000"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/selector_image_folder_button"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/folder_text_color"
+            tools:text="@string/select_folder_all"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:drawablePadding="5dp"
+            android:layout_alignParentLeft="true"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="预览"
+            android:id="@+id/selector_image_preview_button"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>
