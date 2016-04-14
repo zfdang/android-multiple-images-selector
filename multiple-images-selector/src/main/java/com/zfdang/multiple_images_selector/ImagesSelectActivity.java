@@ -6,14 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.zfdang.multiple_images_selector.models.ImageItem;
 
-public class ImagesSelectActivity extends AppCompatActivity implements OnImageGridInteractionListener {
+public class ImagesSelectActivity extends AppCompatActivity implements OnImageRecyclerViewInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images_selector);
 
-        ImageGridFragment gridFragment = ImageGridFragment.newInstance(3);
+        ImageRecyclerViewFragment gridFragment = ImageRecyclerViewFragment.newInstance(3);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.selector_content, gridFragment).commit();
     }

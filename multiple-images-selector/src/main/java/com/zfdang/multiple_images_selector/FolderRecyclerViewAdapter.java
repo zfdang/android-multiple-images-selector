@@ -6,17 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.zfdang.multiple_images_selector.models.ImageItem;
+import com.zfdang.multiple_images_selector.models.FolderItem;
 
 import java.util.List;
 
-public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecyclerViewAdapter.ViewHolder> {
+public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecyclerViewAdapter.ViewHolder> {
 
-    private final List<ImageItem> mValues;
-    private final OnImageRecyclerViewInteractionListener mListener;
-    private static final String TAG = "ImageRecyclerViewAdapter";
+    private final List<FolderItem> mValues;
+    private final OnFolderRecyclerViewInteractionListener mListener;
 
-    public ImageRecyclerViewAdapter(List<ImageItem> items, OnImageRecyclerViewInteractionListener listener) {
+    public FolderRecyclerViewAdapter(List<FolderItem> items, OnFolderRecyclerViewInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -24,16 +23,15 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_image_item, parent, false);
+                .inflate(R.layout.popup_folder_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        ImageItem ii = mValues.get(position);
-        holder.mItem = ii;
-        holder.mIdView.setText(ii.id);
-        holder.mContentView.setText(ii.content);
+        holder.mItem = mValues.get(position);
+        holder.mIdView.setText(mValues.get(position).name);
+        holder.mContentView.setText(mValues.get(position).path);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +39,7 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onImageItemInteraction(holder.mItem);
+                    mListener.onFolderItemInteraction(holder.mItem);
                 }
             }
         });
@@ -56,15 +54,13 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public ImageItem mItem;
+        public FolderItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.image_id);
-            assert mIdView != null;
-            mContentView = (TextView) view.findViewById(R.id.image_content);
-            assert mContentView != null;
+            mIdView = (TextView) view.findViewById(R.id.id);
+            mContentView = (TextView) view.findViewById(R.id.content);
         }
 
         @Override

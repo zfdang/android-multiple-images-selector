@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical" android:layout_width="match_parent"
                 android:background="#21282C"
-                android:layout_height="match_parent">
+                android:layout_height="@dimen/buttom_actionbar_height">
 
     <ImageView
         android:id="@+id/btn_back"
@@ -12,10 +12,10 @@
         android:layout_centerVertical="true"
         android:scaleType="fitCenter"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
     <TextView
-        android:text="图片"
+        android:text="@string/selector_caption"
         android:layout_toRightOf="@+id/btn_back"
         android:textColor="@android:color/white"
         android:textSize="20sp"
@@ -28,7 +28,7 @@
         android:background="@drawable/action_btn"
         android:minHeight="1dp"
         android:minWidth="1dp"
-        android:text="完成"
+        android:text="@string/selector_action_done"
         android:layout_marginRight="16dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"

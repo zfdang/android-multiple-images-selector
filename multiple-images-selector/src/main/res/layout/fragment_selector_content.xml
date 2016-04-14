@@ -14,14 +14,14 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        tools:context="com.zfdang.multiple_images_selector.ImageGridFragment"
+        tools:context=".ImageRecyclerViewFragment"
         tools:listitem="@layout/recyclerview_image_item"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:clickable="true"
         android:background="#cc000000"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_height="@dimen/buttom_actionbar_height"
         android:layout_alignParentBottom="true">
 
         <Button
@@ -31,9 +31,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/folder_text_color"
-            tools:text="@string/select_folder_all"
+            android:text="@string/select_folder_all"
+            android:background="@null"
             android:textSize="16sp"
             android:gravity="center_vertical"
+            android:drawableRight="@drawable/folder_select_indicator"
             android:drawablePadding="5dp"
             android:layout_alignParentLeft="true"/>
 
