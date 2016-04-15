@@ -8,4 +8,5 @@
     <dimen name="top_actionbar_height">38dp</dimen>
     <dimen name="buttom_actionbar_height">38dp</dimen>
 
+    <dimen name="folder_cover_size">72dp</dimen>
 </resources>

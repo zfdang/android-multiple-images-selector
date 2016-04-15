@@ -32,6 +32,7 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
         holder.mIdView.setText(mValues.get(position).id);
         holder.mContentView.setText(mValues.get(position).content);
 
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,8 +60,8 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.folder_id);
-            mContentView = (TextView) view.findViewById(R.id.folder_name);
+            mIdView = (TextView) view.findViewById(R.id.folder_name);
+            mContentView = (TextView) view.findViewById(R.id.folder_path);
         }
 
         @Override

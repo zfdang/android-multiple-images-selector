@@ -21,6 +21,7 @@ public class DemoActivity extends AppCompatActivity {
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // start multiple photos selector
                 Intent intent = new Intent(DemoActivity.this, ImagesSelectorActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
             }

@@ -1,43 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <TextView
+    <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/folder_cover"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center_vertical"
+        android:scaleType="centerInside"
+        fresco:placeholderImage="@drawable/default_folder_cover"
+        fresco:placeholderImageScaleType="fitCenter"
+        fresco:roundedCornerRadius="1dp"
+        android:layout_width="@dimen/folder_cover_size"
+        android:layout_height="@dimen/folder_cover_size" />
+
+    <LinearLayout
+        android:layout_toRightOf="@+id/folder_cover"
+        android:layout_toLeftOf="@+id/folder_indicator"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/folder_name"
+            tools:text="img"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/folder_path"
+            tools:text="/sdcard/a/"
+            android:textSize="12sp"
+            android:textColor="#AFAFAF"
+            android:singleLine="true"
+            android:ellipsize="middle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:id="@+id/size"
+            tools:text="1张"
+            android:layout_marginTop="5dp"
+            android:textSize="12sp"
+            android:textColor="#AFAFAF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/folder_indicator"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/folder_checked"
+        android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView1"/>
+        android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView2"/>
-
-
-    <TextView
-        android:id="@+id/folder_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello world"
-        />
-
-    <TextView
-        android:id="@+id/folder_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"/>
-
-
-
-
-</LinearLayout>
+</RelativeLayout>
