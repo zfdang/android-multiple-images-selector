@@ -17,7 +17,7 @@
         </activity>
 
         <activity
-            android:name="com.zfdang.multiple_images_selector.ImagesSelectActivity"
+            android:name="com.zfdang.multiple_images_selector.ImagesSelectorActivity"
             android:configChanges="orientation|screenSize"/>
     </application>
 

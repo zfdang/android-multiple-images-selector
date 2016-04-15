@@ -15,7 +15,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         tools:context=".ImageRecyclerViewFragment"
-        tools:listitem="@layout/recyclerview_image_item"/>
+        tools:listitem="@layout/fragment_image_item"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

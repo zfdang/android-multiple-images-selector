@@ -33,6 +33,7 @@ public class ImageRecyclerViewFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 3;
     private OnImageRecyclerViewInteractionListener mListener;
+    private OnFolderRecyclerViewInteractionListener mFolderListener;
 
     private TextView mCategoryText;
     private PopupWindow mFolderPopupWindow;
@@ -95,7 +96,7 @@ public class ImageRecyclerViewFragment extends Fragment {
                 if (mFolderPopupWindow.isShowing()) {
                     mFolderPopupWindow.dismiss();
                 } else {
-                    mFolderPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 150);
+                    mFolderPopupWindow.showAtLocation(view, Gravity.BOTTOM, 10, 150);
                     mFolderPopupWindow.update();
 //                    int index = mFolderAdapter.getSelectIndex();
                     int index = 0;
@@ -119,24 +120,33 @@ public class ImageRecyclerViewFragment extends Fragment {
 
 
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View view = layoutInflater.inflate(R.layout.popup_folder_recyclerview, null, false);
+        View view = layoutInflater.inflate(R.layout.popup_folder_recyclerview, null, false);
 
+        View rview = view.findViewById(R.id.folder_recyclerview);
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+        if (rview instanceof RecyclerView) {
+            Context context = rview.getContext();
+            RecyclerView recyclerView = (RecyclerView) rview;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new FolderRecyclerViewAdapter(FolderListContent.ITEMS, null));
+            recyclerView.addItemDecoration(new DividerItemDecoration(context,LinearLayoutManager.VERTICAL, 0));
+            recyclerView.setAdapter(new FolderRecyclerViewAdapter(FolderListContent.ITEMS, mFolderListener));
         }
 
+        // get device size
         Display display = getActivity().getWindowManager().getDefaultDisplay();
-        Point size = new Point();
+        final Point size = new Point();
         display.getSize(size);
 
-        mFolderPopupWindow = new PopupWindow(view, size.x - 50,size.y - 500, true);
-        mFolderPopupWindow.setFocusable(true);
+
+        mFolderPopupWindow = new PopupWindow();
+        mFolderPopupWindow.setContentView(view);
+        mFolderPopupWindow.setWidth(size.x - 50);
+        mFolderPopupWindow.setHeight((int)(size.y * 0.5));
+        // http://stackoverflow.com/questions/12232724/popupwindow-dismiss-when-clicked-outside
+        mFolderPopupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background));
         mFolderPopupWindow.setOutsideTouchable(true);
-//        mFolderPopupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.fb_popup_bg));
+        mFolderPopupWindow.setFocusable(true);
+        mFolderPopupWindow.setAnimationStyle(R.style.AnimationPreview);
 
     }
 
@@ -146,9 +156,8 @@ public class ImageRecyclerViewFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnImageRecyclerViewInteractionListener) {
             mListener = (OnImageRecyclerViewInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnImageRecyclerViewInteractionListener");
+        } else if(context instanceof  OnFolderRecyclerViewInteractionListener) {
+            mFolderListener = (OnFolderRecyclerViewInteractionListener) context;
         }
     }
 
@@ -156,5 +165,6 @@ public class ImageRecyclerViewFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mFolderListener = null;
     }
 }
