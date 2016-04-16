@@ -15,7 +15,7 @@
         android:layout_marginLeft="10dp"
         android:layout_gravity="center_vertical"
         android:scaleType="centerInside"
-        fresco:placeholderImage="@drawable/default_folder_cover"
+        fresco:placeholderImage="@drawable/default_image"
         fresco:placeholderImageScaleType="fitCenter"
         fresco:roundedCornerRadius="1dp"
         android:layout_width="@dimen/folder_cover_size"

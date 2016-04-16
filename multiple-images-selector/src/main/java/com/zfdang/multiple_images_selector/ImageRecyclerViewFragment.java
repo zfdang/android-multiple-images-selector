@@ -1,52 +1,57 @@
 package com.zfdang.multiple_images_selector;
 
+import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.Point;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.zfdang.multiple_images_selector.models.FolderListContent;
+import com.zfdang.multiple_images_selector.models.ImageItem;
 import com.zfdang.multiple_images_selector.models.ImageListContent;
-import com.zfdang.multiple_images_selector.utilities.ScreenUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 
 /**
  * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnImageRecyclerViewInteractionListener}
- * interface.
  */
 public class ImageRecyclerViewFragment extends Fragment {
+    private static final String TAG = "ImageFragment";
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 3;
     private OnImageRecyclerViewInteractionListener mListener;
     private OnFolderRecyclerViewInteractionListener mFolderListener;
 
     private TextView mCategoryText;
-    private PopupWindow mFolderPopupWindow;
+    private FolderPopupWindow mFolderPopupWindow;
+    private RecyclerView recyclerView;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    private boolean isFolderListGenerated;
+    private String folderPath;
+    private ContentResolver contentResolver;
+
     public ImageRecyclerViewFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static ImageRecyclerViewFragment newInstance(int columnCount) {
         ImageRecyclerViewFragment fragment = new ImageRecyclerViewFragment();
         Bundle args = new Bundle();
@@ -73,13 +78,13 @@ public class ImageRecyclerViewFragment extends Fragment {
         // Set the adapter
         if (rview instanceof RecyclerView) {
             Context context = rview.getContext();
-            RecyclerView recyclerView = (RecyclerView) rview;
+            recyclerView = (RecyclerView) rview;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ImageRecyclerViewAdapter(ImageListContent.ITEMS, mListener));
+            recyclerView.setAdapter(new ImageRecyclerViewAdapter(ImageListContent.IMAGES, mListener));
         }
 
 
@@ -90,14 +95,14 @@ public class ImageRecyclerViewFragment extends Fragment {
             public void onClick(final View view) {
 
                 if (mFolderPopupWindow == null) {
-                    createPopupFolderList();
+                    mFolderPopupWindow = new FolderPopupWindow();
+                    mFolderPopupWindow.initPopupWindow(getActivity());
                 }
 
                 if (mFolderPopupWindow.isShowing()) {
                     mFolderPopupWindow.dismiss();
                 } else {
                     mFolderPopupWindow.showAtLocation(view, Gravity.BOTTOM, 10, 150);
-                    mFolderPopupWindow.update();
 //                    int index = mFolderAdapter.getSelectIndex();
                     int index = 0;
                     index = index == 0 ? index : index - 1;
@@ -105,48 +110,82 @@ public class ImageRecyclerViewFragment extends Fragment {
                 }
             }
         });
-        
+
+        isFolderListGenerated = false;
+        LoadFolderAndImages();
         return view;
     }
 
+    private final String[] projections = {
+            MediaStore.Images.Media.DATA,
+            MediaStore.Images.Media.DISPLAY_NAME,
+            MediaStore.Images.Media.DATE_ADDED,
+            MediaStore.Images.Media.MIME_TYPE,
+            MediaStore.Images.Media.SIZE,
+            MediaStore.Images.Media._ID};
 
-    /**
-     * http://stackoverflow.com/questions/23464232/how-would-you-create-a-popover-view-in-android-like-facebook-comments
-     */
-    private void createPopupFolderList() {
-        Point point = ScreenUtils.getScreenSize(getActivity());
-        int width = point.x;
-        int height = (int) (point.y * (4.5f / 8.0f));
+    // this method is to load images and folders for all
+    public void LoadFolderAndImages() {
+        Observable.just(folderPath)
+                .flatMap(new Func1<String, Observable<ImageItem>>() {
+                    @Override
+                    public Observable<ImageItem> call(String s) {
+                        List<ImageItem> results = new ArrayList<>();
 
+                        contentResolver = getActivity().getContentResolver();
+                        Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.popup_folder_recyclerview, null, false);
+                        String where = "mime_type in (\"image/jpeg\", \"image/png\")";
+                        String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
 
-        View rview = view.findViewById(R.id.folder_recyclerview);
-        // Set the adapter
-        if (rview instanceof RecyclerView) {
-            Context context = rview.getContext();
-            RecyclerView recyclerView = (RecyclerView) rview;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.addItemDecoration(new DividerItemDecoration(context,LinearLayoutManager.VERTICAL, 0));
-            recyclerView.setAdapter(new FolderRecyclerViewAdapter(FolderListContent.ITEMS, mFolderListener));
-        }
+                        Cursor cursor = contentResolver.query(contentUri, projections, where, null, sortOrder);
+                        if (cursor == null) {
+                            Log.d(TAG, "call: " + "Empty images");
+                        } else if (cursor.moveToFirst()) {
+                            int pathCol = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                            int nameCol = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
+                            int DateCol = cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED);
+                            do {
+                                String path = cursor.getString(pathCol);
+                                String name = cursor.getString(nameCol);
+                                long dateTime = cursor.getLong(DateCol);
 
-        // get device size
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        final Point size = new Point();
-        display.getSize(size);
+                                ImageItem item = new ImageItem(path, name, dateTime);
+                                results.add(item);
 
+                                if(!isFolderListGenerated) {
+                                    // find the path for this image, and add it to folderList
 
-        mFolderPopupWindow = new PopupWindow();
-        mFolderPopupWindow.setContentView(view);
-        mFolderPopupWindow.setWidth(size.x - 50);
-        mFolderPopupWindow.setHeight((int)(size.y * 0.5));
-        // http://stackoverflow.com/questions/12232724/popupwindow-dismiss-when-clicked-outside
-        mFolderPopupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background));
-        mFolderPopupWindow.setOutsideTouchable(true);
-        mFolderPopupWindow.setFocusable(true);
-        mFolderPopupWindow.setAnimationStyle(R.style.AnimationPreview);
+                                }
+                            } while (cursor.moveToNext());
+                        }
+
+                        return Observable.from(results);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ImageItem>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted: ");
+
+                        // folder list has been generated, don't generate it again
+                        isFolderListGenerated = true;
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: " + Log.getStackTraceString(e));
+                    }
+
+                    @Override
+                    public void onNext(ImageItem imageItem) {
+                        Log.d(TAG, "onNext: " + imageItem.toString());
+                        ImageListContent.addItem(imageItem);
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                });
 
     }
 

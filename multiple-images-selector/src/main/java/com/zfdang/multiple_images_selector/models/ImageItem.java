@@ -1,21 +1,28 @@
 package com.zfdang.multiple_images_selector.models;
 
-/**
- * Created by zfdang on 2016-4-12.
- */
-public class ImageItem {
-    public final String id;
-    public final String content;
-    public final String details;
+import android.util.Log;
 
-    public ImageItem(String id, String content, String details) {
-        this.id = id;
-        this.content = content;
-        this.details = details;
+public class ImageItem {
+    private static final String TAG = "ImageItem";
+
+    public String path;
+    public String name;
+    public long time;
+
+    public ImageItem(String path, String name, long time){
+        this.path = path;
+        this.name = name;
+        this.time = time;
     }
 
     @Override
-    public String toString() {
-        return content;
+    public boolean equals(Object o) {
+        try {
+            ImageItem other = (ImageItem) o;
+            return this.path.equalsIgnoreCase(other.path);
+        }catch (ClassCastException e){
+            Log.e(TAG, "equals: " + Log.getStackTraceString(e));
+        }
+        return super.equals(o);
     }
 }

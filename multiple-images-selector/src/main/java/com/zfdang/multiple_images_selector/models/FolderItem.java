@@ -5,10 +5,6 @@ import android.text.TextUtils;
 
 import java.util.List;
 
-/**
- * 文件夹
- * Created by Nereo on 2015/4/7.
- */
 public class FolderItem {
     public String name;
     public String path;
