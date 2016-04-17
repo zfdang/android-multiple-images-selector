@@ -10,8 +10,8 @@
 
     <FrameLayout
         android:id="@+id/selector_content"
-        android:background="#ffffff"
         android:layout_width="match_parent"
+        android:layout_margin="0dp"
         android:layout_height="match_parent" />
 
 </LinearLayout>

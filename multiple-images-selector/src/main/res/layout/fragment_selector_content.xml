@@ -3,7 +3,8 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white">
+                android:layout_margin="0dp"
+                android:background="@android:color/black">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/image_recycerview"
@@ -12,8 +13,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         tools:context=".ImageRecyclerViewFragment"
         tools:listitem="@layout/fragment_image_item"/>
 
@@ -42,10 +43,9 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="预览"
+            android:text="@string/selector_preview"
             android:id="@+id/selector_image_preview_button"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
-
 
 </RelativeLayout>

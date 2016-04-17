@@ -92,6 +92,7 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
         public final View mView;
         public final SimpleDraweeView mDrawee;
         public final ImageView mChecked;
+        public final View mMask;
         public ImageItem mItem;
 
         public ViewHolder(View view) {
@@ -99,11 +100,11 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
             mView = view;
             mDrawee = (SimpleDraweeView) view.findViewById(R.id.image_drawee);
             assert mDrawee != null;
+            mMask = view.findViewById(R.id.image_mask);
+            assert mMask != null;
             mChecked = (ImageView) view.findViewById(R.id.image_checked);
             assert mChecked != null;
         }
-
-
 
         @Override
         public String toString() {

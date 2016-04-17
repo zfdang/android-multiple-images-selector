@@ -3,4 +3,5 @@
     <string name="select_folder_all">所有图片</string>
     <string name="selector_caption">选择图片</string>
     <string name="selector_action_done">完成</string>
+    <string name="selector_preview">预览</string>
 </resources>
