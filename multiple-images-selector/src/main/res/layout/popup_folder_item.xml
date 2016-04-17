@@ -10,7 +10,7 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         xmlns:fresco="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/folder_cover"
+        android:id="@+id/folder_cover_image"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_gravity="center_vertical"
@@ -22,7 +22,7 @@
         android:layout_height="@dimen/folder_cover_size" />
 
     <LinearLayout
-        android:layout_toRightOf="@+id/folder_cover"
+        android:layout_toRightOf="@+id/folder_cover_image"
         android:layout_toLeftOf="@+id/folder_indicator"
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
@@ -52,7 +52,7 @@
         <TextView
             android:singleLine="true"
             android:ellipsize="end"
-            android:id="@+id/size"
+            android:id="@+id/folder_size"
             tools:text="1张"
             android:layout_marginTop="5dp"
             android:textSize="12sp"

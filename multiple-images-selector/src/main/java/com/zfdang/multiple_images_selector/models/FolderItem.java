@@ -1,40 +1,33 @@
 package com.zfdang.multiple_images_selector.models;
 
-import android.media.Image;
-import android.text.TextUtils;
-
-import java.util.List;
-
 public class FolderItem {
     public String name;
     public String path;
-    public Image cover;
-    public List<Image> images;
+    public String coverImagePath;
+    public int numOfImages;
 
-    @Override
-    public boolean equals(Object o) {
-        try {
-            FolderItem other = (FolderItem) o;
-            return TextUtils.equals(other.path, path);
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
-        return super.equals(o);
+    public FolderItem(String name, String path, String coverImagePath) {
+        this.name = name;
+        this.path = path;
+        this.coverImagePath = coverImagePath;
+        this.numOfImages = 1;
     }
 
-    public final String id;
-    public final String content;
-    public final String details;
+    public void incNumOfImages() {
+        this.numOfImages += 1;
+    }
 
-    public FolderItem(String id, String content, String details) {
-        this.id = id;
-        this.content = content;
-        this.details = details;
+    public String getNumOfImages() {
+        return String.format("%d", this.numOfImages);
     }
 
     @Override
     public String toString() {
-        return content;
+        return "FolderItem{" +
+                "coverImagePath='" + coverImagePath + '\'' +
+                ", name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", numOfImages=" + numOfImages +
+                '}';
     }
-
 }

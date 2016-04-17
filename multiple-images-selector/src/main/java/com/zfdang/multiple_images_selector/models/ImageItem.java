@@ -25,4 +25,13 @@ public class ImageItem {
         }
         return super.equals(o);
     }
+
+    @Override
+    public String toString() {
+        return "ImageItem{" +
+                "name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", time=" + time +
+                '}';
+    }
 }

@@ -17,9 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.zfdang.multiple_images_selector.models.FolderItem;
+import com.zfdang.multiple_images_selector.models.FolderListContent;
 import com.zfdang.multiple_images_selector.models.ImageItem;
 import com.zfdang.multiple_images_selector.models.ImageListContent;
+import com.zfdang.multiple_images_selector.utilities.StringUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,9 +158,18 @@ public class ImageRecyclerViewFragment extends Fragment {
                                 results.add(item);
 
                                 if(!isFolderListGenerated) {
-                                    // find the path for this image, and add it to folderList
-
-                                }
+                                    // find the path for this image, and add it to folderList if necessary
+                                    String folderPath = new File(path).getParentFile().getAbsolutePath();
+                                    FolderItem folderItem = FolderListContent.getItem(folderPath);
+                                    if (folderItem == null) {
+                                        // does not exist, create it
+                                        folderItem = new FolderItem(StringUtils.getLastStringSegment(folderPath), folderPath, path);
+                                        FolderListContent.addItem(folderItem);
+                                    } else {
+                                        // increase image numbers
+                                        folderItem.incNumOfImages();
+                                    }
+                                } // if(!isFolderListGenerated) {
                             } while (cursor.moveToNext());
                         }
 

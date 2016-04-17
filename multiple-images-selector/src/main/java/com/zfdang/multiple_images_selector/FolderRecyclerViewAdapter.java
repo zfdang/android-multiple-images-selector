@@ -1,13 +1,18 @@
 package com.zfdang.multiple_images_selector;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.zfdang.multiple_images_selector.models.FolderItem;
+import com.zfdang.multiple_images_selector.utilities.DraweeUtils;
 
+import java.io.File;
 import java.util.List;
 
 public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecyclerViewAdapter.ViewHolder> {
@@ -28,10 +33,13 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        FolderItem folderItem = mValues.get(position);
+        holder.mItem = folderItem;
+        holder.folderName.setText(folderItem.name);
+        holder.folderPath.setText(folderItem.path);
+        holder.folderSize.setText(folderItem.getNumOfImages());
 
+        DraweeUtils.showThumb(Uri.fromFile(new File(folderItem.coverImagePath)), holder.folderCover);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,21 +60,34 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public FolderItem mItem;
+        FolderItem mItem;
+        View mView;
+        SimpleDraweeView folderCover;
+        TextView folderName;
+        TextView folderPath;
+        TextView folderSize;
+        ImageView folderIndicator;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.folder_name);
-            mContentView = (TextView) view.findViewById(R.id.folder_path);
+            folderCover = (SimpleDraweeView) view.findViewById(R.id.folder_cover_image);
+            folderName = (TextView) view.findViewById(R.id.folder_name);
+            folderPath = (TextView) view.findViewById(R.id.folder_path);
+            folderSize = (TextView) view.findViewById(R.id.folder_size);
+            folderIndicator = (ImageView) view.findViewById(R.id.folder_indicator);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return "ViewHolder{" +
+                    "folderCover=" + folderCover +
+                    ", mView=" + mView +
+                    ", folderName=" + folderName +
+                    ", folderPath=" + folderPath +
+                    ", folderSize=" + folderSize +
+                    ", folderIndicator=" + folderIndicator +
+                    '}';
         }
     }
 }
