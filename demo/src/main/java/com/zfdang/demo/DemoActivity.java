@@ -7,10 +7,14 @@ import android.view.View;
 import android.widget.Button;
 
 import com.zfdang.multiple_images_selector.ImagesSelectorActivity;
+import com.zfdang.multiple_images_selector.models.SelectorSettings;
+
+import java.util.ArrayList;
 
 public class DemoActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 732;
+    private ArrayList<String> mPhotos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,9 @@ public class DemoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // start multiple photos selector
                 Intent intent = new Intent(DemoActivity.this, ImagesSelectorActivity.class);
+                intent.putExtra(SelectorSettings.SELECTOR_MAX_IMAGE_NUMBER, 5);
+                intent.putExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, false);
+                intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mPhotos);
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });

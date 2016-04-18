@@ -1,7 +1,9 @@
 package com.zfdang.multiple_images_selector;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,12 +17,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zfdang.multiple_images_selector.models.FolderItem;
 import com.zfdang.multiple_images_selector.models.FolderListContent;
 import com.zfdang.multiple_images_selector.models.ImageItem;
 import com.zfdang.multiple_images_selector.models.ImageListContent;
+import com.zfdang.multiple_images_selector.models.SelectorSettings;
 import com.zfdang.multiple_images_selector.utilities.StringUtils;
 
 import java.io.File;
@@ -37,7 +42,7 @@ import rx.schedulers.Schedulers;
 /**
  * A fragment representing a list of Items.
  */
-public class ImageRecyclerViewFragment extends Fragment {
+public class ImageRecyclerViewFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "ImageFragment";
 
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -53,6 +58,9 @@ public class ImageRecyclerViewFragment extends Fragment {
     private boolean isFolderListGenerated;
     private String currentFolderPath;
     private ContentResolver contentResolver;
+    private ImageView mButtonBack;
+    private Button mButtonConfirm
+            ;
 
     public ImageRecyclerViewFragment() {
     }
@@ -91,6 +99,12 @@ public class ImageRecyclerViewFragment extends Fragment {
             }
             recyclerView.setAdapter(new ImageRecyclerViewAdapter(ImageListContent.IMAGES, mListener));
         }
+
+        mButtonBack = (ImageView) view.findViewById(R.id.selector_button_back);
+        mButtonBack.setOnClickListener(this);
+
+        mButtonConfirm = (Button) view.findViewById(R.id.selector_button_confirm);
+        mButtonConfirm.setOnClickListener(this);
 
 
         mCategoryText = (TextView) view.findViewById(R.id.selector_image_folder_button);
@@ -132,6 +146,8 @@ public class ImageRecyclerViewFragment extends Fragment {
         String newFolderPath = folder.path;
         if( !newFolderPath.equals(this.currentFolderPath)) {
             this.currentFolderPath = newFolderPath;
+            ImageListContent.clear();
+            recyclerView.getAdapter().notifyDataSetChanged();
             LoadFolderAndImages();
         } else {
             Log.d(TAG, "OnFolderChange: " + "Same folder selected, skip loading.");
@@ -157,7 +173,11 @@ public class ImageRecyclerViewFragment extends Fragment {
                         List<ImageItem> results = new ArrayList<>();
 
                         Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                        String where = "mime_type in (\"image/jpeg\", \"image/png\")";
+                        String where = MediaStore.Images.Media.SIZE + " > 10000";
+                        if(currentFolderPath != null && currentFolderPath.length() > 0) {
+                            where += " and " + MediaStore.Images.Media.DATA + " like '" + currentFolderPath + "/%'";
+                            Log.d(TAG, "call: " + where);
+                        }
                         String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
 
                         contentResolver = getActivity().getContentResolver();
@@ -192,6 +212,7 @@ public class ImageRecyclerViewFragment extends Fragment {
                             } while (cursor.moveToNext());
                         }
 
+                        cursor.close();
                         return Observable.from(results);
                     }
                 })
@@ -211,7 +232,7 @@ public class ImageRecyclerViewFragment extends Fragment {
 
                     @Override
                     public void onNext(ImageItem imageItem) {
-//                        Log.d(TAG, "onNext: " + imageItem.toString());
+                        Log.d(TAG, "onNext: " + imageItem.toString());
                         ImageListContent.addItem(imageItem);
                         recyclerView.getAdapter().notifyDataSetChanged();
                     }
@@ -233,5 +254,18 @@ public class ImageRecyclerViewFragment extends Fragment {
         super.onDetach();
         mListener = null;
         mFolderListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if( v == mButtonBack) {
+            getActivity().setResult(Activity.RESULT_CANCELED);
+            getActivity().finish();
+        } else if(v == mButtonConfirm) {
+            Intent data = new Intent();
+            data.putStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS, new ArrayList<String>());
+            getActivity().setResult(Activity.RESULT_OK, data);
+            getActivity().finish();
+        }
     }
 }

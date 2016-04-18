@@ -5,7 +5,7 @@
                 android:layout_height="@dimen/buttom_actionbar_height">
 
     <ImageView
-        android:id="@+id/btn_back"
+        android:id="@+id/selector_button_back"
         android:src="@drawable/ic_arrow_back_white_24dp"
         android:paddingLeft="12dp"
         android:paddingRight="16dp"
@@ -16,7 +16,7 @@
 
     <TextView
         android:text="@string/selector_caption"
-        android:layout_toRightOf="@+id/btn_back"
+        android:layout_toRightOf="@+id/selector_button_back"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:layout_centerVertical="true"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/commit"
+        android:id="@+id/selector_button_confirm"
         android:background="@drawable/action_btn"
         android:minHeight="1dp"
         android:minWidth="1dp"
