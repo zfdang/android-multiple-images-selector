@@ -10,9 +10,10 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
         tools:context=".ImageRecyclerViewFragment"
+        android:scrollbars="vertical"
         tools:listitem="@layout/popup_folder_item"/>
 
 </LinearLayout>

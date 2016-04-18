@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.zfdang.multiple_images_selector.models.FolderItem;
 import com.zfdang.multiple_images_selector.models.ImageItem;
-import com.zfdang.multiple_images_selector.models.SelectorSettings;
 
 import java.util.ArrayList;
 

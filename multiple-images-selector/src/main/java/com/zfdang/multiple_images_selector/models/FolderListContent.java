@@ -10,12 +10,16 @@ public class FolderListContent {
     public static final List<FolderItem> FOLDERS = new ArrayList<FolderItem>();
     public static final Map<String, FolderItem> FOLDERS_MAP = new HashMap<>();
 
-    public static FolderItem currentFolder;
-    public static FolderItem getCurrentFolder() {
-        return currentFolder;
+    public static FolderItem selectedFolder;
+    // used to locate item in popupwindow
+    public static int selectedFolderIndex;
+
+    public static FolderItem getSelectedFolder() {
+        return selectedFolder;
     }
-    public static void setCurrentFolder(FolderItem currentFolder) {
-        FolderListContent.currentFolder = currentFolder;
+    public static void setSelectedFolder(FolderItem currentFolder, int index) {
+        FolderListContent.selectedFolder = currentFolder;
+        FolderListContent.selectedFolderIndex = index;
     }
 
     public static void clear() {

@@ -32,6 +32,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 
 /**
@@ -45,7 +46,7 @@ public class ImageRecyclerViewFragment extends Fragment{
     private OnImageRecyclerViewInteractionListener mListener;
     private OnFolderRecyclerViewInteractionListener mFolderListener;
 
-    private TextView mCategoryText;
+    private TextView mSelectedFolderHint;
     private FolderPopupWindow mFolderPopupWindow;
     private RecyclerView recyclerView;
 
@@ -53,6 +54,7 @@ public class ImageRecyclerViewFragment extends Fragment{
     private boolean isFolderListGenerated;
     private String currentFolderPath;
     private ContentResolver contentResolver;
+    private View mPopupAnchorView;
 
     public ImageRecyclerViewFragment() {
     }
@@ -90,11 +92,20 @@ public class ImageRecyclerViewFragment extends Fragment{
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(new ImageRecyclerViewAdapter(ImageListContent.IMAGES, mListener));
+
+            VerticalRecyclerViewFastScroller fastScroller = (VerticalRecyclerViewFastScroller) view.findViewById(R.id.recyclerview_fast_scroller);
+            // Connect the recycler to the scroller (to let the scroller scroll the list)
+            fastScroller.setRecyclerView(recyclerView);
+            // Connect the scroller to the recycler (to let the recycler scroll the scroller's handle)
+            recyclerView.setOnScrollListener(fastScroller.getOnScrollListener());
         }
 
-        mCategoryText = (TextView) view.findViewById(R.id.selector_image_folder_button);
-        mCategoryText.setText(R.string.select_folder_all);
-        mCategoryText.setOnClickListener(new View.OnClickListener() {
+        // popup windows will be anchored to this view
+        mPopupAnchorView = view.findViewById(R.id.selector_footer);
+
+        mSelectedFolderHint = (TextView) view.findViewById(R.id.selector_image_folder_button);
+        mSelectedFolderHint.setText(R.string.select_folder_all);
+        mSelectedFolderHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
 
@@ -106,7 +117,7 @@ public class ImageRecyclerViewFragment extends Fragment{
                 if (mFolderPopupWindow.isShowing()) {
                     mFolderPopupWindow.dismiss();
                 } else {
-                    mFolderPopupWindow.showAtLocation(view, Gravity.BOTTOM, 10, 150);
+                    mFolderPopupWindow.showAtLocation(mPopupAnchorView, Gravity.BOTTOM, 10, 150);
 //                    int index = mFolderAdapter.getSelectIndex();
                     int index = 0;
                     index = index == 0 ? index : index - 1;
@@ -127,17 +138,17 @@ public class ImageRecyclerViewFragment extends Fragment{
     public void OnFolderChange() {
         mFolderPopupWindow.dismiss();
 
-        FolderItem folder = FolderListContent.getCurrentFolder();
+        FolderItem folder = FolderListContent.getSelectedFolder();
         String newFolderPath = folder.path;
         if( !newFolderPath.equals(this.currentFolderPath)) {
             this.currentFolderPath = newFolderPath;
+            mSelectedFolderHint.setText(folder.name);
             ImageListContent.clear();
             recyclerView.getAdapter().notifyDataSetChanged();
             LoadFolderAndImages();
         } else {
             Log.d(TAG, "OnFolderChange: " + "Same folder selected, skip loading.");
         }
-
     }
 
     private final String[] projections = {
@@ -170,6 +181,7 @@ public class ImageRecyclerViewFragment extends Fragment{
                         if (cursor == null) {
                             Log.d(TAG, "call: " + "Empty images");
                         } else if (cursor.moveToFirst()) {
+                            FolderItem allFolderItem = null;
                             int pathCol = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
                             int nameCol = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
                             int DateCol = cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED);
@@ -182,6 +194,17 @@ public class ImageRecyclerViewFragment extends Fragment{
                                 results.add(item);
 
                                 if(!isFolderListGenerated) {
+                                    // if FolderListContent is still empty, add "All Images" option
+                                    if(FolderListContent.FOLDERS.size() == 0) {
+                                        // add folder for all image
+                                        FolderListContent.selectedFolderIndex = 0;
+                                        allFolderItem = new FolderItem(getActivity().getString(R.string.select_folder_all), "", path);
+                                        FolderListContent.addItem(allFolderItem);
+                                    } else if (allFolderItem != null) {
+                                        // "All Image" selection exists, increase its counter
+                                        allFolderItem.incNumOfImages();
+                                    }
+
                                     // find the path for this image, and add path to folderList if not existed
                                     String folderPath = new File(path).getParentFile().getAbsolutePath();
                                     FolderItem folderItem = FolderListContent.getItem(folderPath);

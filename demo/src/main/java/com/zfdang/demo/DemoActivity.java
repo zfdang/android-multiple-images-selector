@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.zfdang.multiple_images_selector.ImagesSelectorActivity;
-import com.zfdang.multiple_images_selector.models.SelectorSettings;
+import com.zfdang.multiple_images_selector.SelectorSettings;
 
 import java.util.ArrayList;
 

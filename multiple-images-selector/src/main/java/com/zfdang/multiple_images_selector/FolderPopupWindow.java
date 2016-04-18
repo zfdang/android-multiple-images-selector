@@ -51,8 +51,8 @@ public class FolderPopupWindow extends PopupWindow {
         display.getSize(size);
 
         this.setContentView(conentView);
-        this.setWidth(size.x - 50);
-        this.setHeight((int) (size.y * 0.5));
+        this.setWidth(size.x);
+        this.setHeight((int) (size.y * 0.618));
         // http://stackoverflow.com/questions/12232724/popupwindow-dismiss-when-clicked-outside
         this.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.popup_background));
         this.setOutsideTouchable(true);

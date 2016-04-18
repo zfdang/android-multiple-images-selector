@@ -1,4 +1,4 @@
-package com.zfdang.multiple_images_selector.models;
+package com.zfdang.multiple_images_selector;
 
 import java.util.ArrayList;
 

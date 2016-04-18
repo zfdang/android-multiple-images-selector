@@ -35,12 +35,18 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         FolderItem folderItem = mValues.get(position);
         holder.mItem = folderItem;
         holder.folderName.setText(folderItem.name);
         holder.folderPath.setText(folderItem.path);
         holder.folderSize.setText(folderItem.getNumOfImages());
+
+        if(position == FolderListContent.selectedFolderIndex) {
+            holder.folderIndicator.setVisibility(View.VISIBLE);
+        } else {
+            holder.folderIndicator.setVisibility(View.GONE);
+        }
 
         DraweeUtils.showThumb(Uri.fromFile(new File(folderItem.coverImagePath)), holder.folderCover);
 
@@ -49,12 +55,13 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
             public void onClick(View v) {
                 Log.d(TAG, "onClick: " + holder.mItem.toString());
                 // pass the selected result to FolderListContent
-                FolderListContent.setCurrentFolder(holder.mItem);
+                FolderListContent.setSelectedFolder(holder.mItem, position);
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onFolderItemInteraction(holder.mItem);
                 }
+                notifyDataSetChanged();
             }
         });
     }
@@ -81,7 +88,7 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
             folderName = (TextView) view.findViewById(R.id.folder_name);
             folderPath = (TextView) view.findViewById(R.id.folder_path);
             folderSize = (TextView) view.findViewById(R.id.folder_size);
-            folderIndicator = (ImageView) view.findViewById(R.id.folder_indicator);
+            folderIndicator = (ImageView) view.findViewById(R.id.folder_selected_indicator);
         }
 
         @Override
