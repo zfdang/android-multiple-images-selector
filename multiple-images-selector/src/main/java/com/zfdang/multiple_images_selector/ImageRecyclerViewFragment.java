@@ -1,9 +1,7 @@
 package com.zfdang.multiple_images_selector;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,15 +15,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zfdang.multiple_images_selector.models.FolderItem;
 import com.zfdang.multiple_images_selector.models.FolderListContent;
 import com.zfdang.multiple_images_selector.models.ImageItem;
 import com.zfdang.multiple_images_selector.models.ImageListContent;
-import com.zfdang.multiple_images_selector.models.SelectorSettings;
 import com.zfdang.multiple_images_selector.utilities.StringUtils;
 
 import java.io.File;
@@ -42,7 +37,7 @@ import rx.schedulers.Schedulers;
 /**
  * A fragment representing a list of Items.
  */
-public class ImageRecyclerViewFragment extends Fragment implements View.OnClickListener{
+public class ImageRecyclerViewFragment extends Fragment{
     private static final String TAG = "ImageFragment";
 
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -58,9 +53,6 @@ public class ImageRecyclerViewFragment extends Fragment implements View.OnClickL
     private boolean isFolderListGenerated;
     private String currentFolderPath;
     private ContentResolver contentResolver;
-    private ImageView mButtonBack;
-    private Button mButtonConfirm
-            ;
 
     public ImageRecyclerViewFragment() {
     }
@@ -99,13 +91,6 @@ public class ImageRecyclerViewFragment extends Fragment implements View.OnClickL
             }
             recyclerView.setAdapter(new ImageRecyclerViewAdapter(ImageListContent.IMAGES, mListener));
         }
-
-        mButtonBack = (ImageView) view.findViewById(R.id.selector_button_back);
-        mButtonBack.setOnClickListener(this);
-
-        mButtonConfirm = (Button) view.findViewById(R.id.selector_button_confirm);
-        mButtonConfirm.setOnClickListener(this);
-
 
         mCategoryText = (TextView) view.findViewById(R.id.selector_image_folder_button);
         mCategoryText.setText(R.string.select_folder_all);
@@ -256,16 +241,5 @@ public class ImageRecyclerViewFragment extends Fragment implements View.OnClickL
         mFolderListener = null;
     }
 
-    @Override
-    public void onClick(View v) {
-        if( v == mButtonBack) {
-            getActivity().setResult(Activity.RESULT_CANCELED);
-            getActivity().finish();
-        } else if(v == mButtonConfirm) {
-            Intent data = new Intent();
-            data.putStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS, new ArrayList<String>());
-            getActivity().setResult(Activity.RESULT_OK, data);
-            getActivity().finish();
-        }
-    }
+
 }
