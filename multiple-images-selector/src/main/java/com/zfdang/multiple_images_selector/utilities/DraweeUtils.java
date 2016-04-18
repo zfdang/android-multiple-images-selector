@@ -19,9 +19,8 @@ public class DraweeUtils {
 
     // http://www.jianshu.com/p/5364957dcf49
     public static void showThumb(Uri uri, SimpleDraweeView draweeView){
-
-//        Log.d(TAG, "showThumb: " + uri);
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setAutoRotateEnabled(true)
                 .setResizeOptions(new ResizeOptions(200, 200))
                 .build();
 
