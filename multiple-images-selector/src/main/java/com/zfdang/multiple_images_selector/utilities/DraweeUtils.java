@@ -1,7 +1,6 @@
 package com.zfdang.multiple_images_selector.utilities;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
@@ -21,7 +20,7 @@ public class DraweeUtils {
     // http://www.jianshu.com/p/5364957dcf49
     public static void showThumb(Uri uri, SimpleDraweeView draweeView){
 
-        Log.d(TAG, "showThumb: " + uri);
+//        Log.d(TAG, "showThumb: " + uri);
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                 .setResizeOptions(new ResizeOptions(200, 200))
                 .build();

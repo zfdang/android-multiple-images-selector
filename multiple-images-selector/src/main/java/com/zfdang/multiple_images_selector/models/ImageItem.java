@@ -9,9 +9,9 @@ public class ImageItem {
     public String name;
     public long time;
 
-    public ImageItem(String path, String name, long time){
-        this.path = path;
+    public ImageItem(String name, String path, long time){
         this.name = name;
+        this.path = path;
         this.time = time;
     }
 

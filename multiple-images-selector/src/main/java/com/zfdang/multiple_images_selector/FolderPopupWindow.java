@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,17 +24,13 @@ public class FolderPopupWindow extends PopupWindow {
     private RecyclerView recyclerView;
     private OnFolderRecyclerViewInteractionListener mListener = null;
 
-
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
-    }
-
-
     // http://stackoverflow.com/questions/23464232/how-would-you-create-a-popover-view-in-android-like-facebook-comments
     public void initPopupWindow(final Activity context) {
         mContext = context;
         if (context instanceof OnFolderRecyclerViewInteractionListener) {
             mListener = (OnFolderRecyclerViewInteractionListener) context;
+        } else {
+            Log.d(TAG, "initPopupWindow: " + "context does not implement OnFolderRecyclerViewInteractionListener");
         }
 
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

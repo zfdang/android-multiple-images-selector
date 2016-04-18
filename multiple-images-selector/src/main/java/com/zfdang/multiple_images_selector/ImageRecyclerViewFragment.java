@@ -49,8 +49,9 @@ public class ImageRecyclerViewFragment extends Fragment {
     private FolderPopupWindow mFolderPopupWindow;
     private RecyclerView recyclerView;
 
+    // flag to indicate whether we have generated folder list
     private boolean isFolderListGenerated;
-    private String folderPath;
+    private String currentFolderPath;
     private ContentResolver contentResolver;
 
     public ImageRecyclerViewFragment() {
@@ -116,8 +117,26 @@ public class ImageRecyclerViewFragment extends Fragment {
         });
 
         isFolderListGenerated = false;
+        currentFolderPath = "";
+        FolderListContent.clear();
+        ImageListContent.clear();
+
         LoadFolderAndImages();
         return view;
+    }
+
+    public void OnFolderChange() {
+        mFolderPopupWindow.dismiss();
+
+        FolderItem folder = FolderListContent.getCurrentFolder();
+        String newFolderPath = folder.path;
+        if( !newFolderPath.equals(this.currentFolderPath)) {
+            this.currentFolderPath = newFolderPath;
+            LoadFolderAndImages();
+        } else {
+            Log.d(TAG, "OnFolderChange: " + "Same folder selected, skip loading.");
+        }
+
     }
 
     private final String[] projections = {
@@ -130,18 +149,18 @@ public class ImageRecyclerViewFragment extends Fragment {
 
     // this method is to load images and folders for all
     public void LoadFolderAndImages() {
-        Observable.just(folderPath)
+        Log.d(TAG, "LoadFolderAndImages: " + "loading images for folder " + this.currentFolderPath);
+        Observable.just(this.currentFolderPath)
                 .flatMap(new Func1<String, Observable<ImageItem>>() {
                     @Override
-                    public Observable<ImageItem> call(String s) {
+                    public Observable<ImageItem> call(String folder) {
                         List<ImageItem> results = new ArrayList<>();
 
-                        contentResolver = getActivity().getContentResolver();
                         Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
                         String where = "mime_type in (\"image/jpeg\", \"image/png\")";
                         String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
 
+                        contentResolver = getActivity().getContentResolver();
                         Cursor cursor = contentResolver.query(contentUri, projections, where, null, sortOrder);
                         if (cursor == null) {
                             Log.d(TAG, "call: " + "Empty images");
@@ -154,16 +173,16 @@ public class ImageRecyclerViewFragment extends Fragment {
                                 String name = cursor.getString(nameCol);
                                 long dateTime = cursor.getLong(DateCol);
 
-                                ImageItem item = new ImageItem(path, name, dateTime);
+                                ImageItem item = new ImageItem(name, path, dateTime);
                                 results.add(item);
 
                                 if(!isFolderListGenerated) {
-                                    // find the path for this image, and add it to folderList if necessary
+                                    // find the path for this image, and add path to folderList if not existed
                                     String folderPath = new File(path).getParentFile().getAbsolutePath();
                                     FolderItem folderItem = FolderListContent.getItem(folderPath);
                                     if (folderItem == null) {
                                         // does not exist, create it
-                                        folderItem = new FolderItem(StringUtils.getLastStringSegment(folderPath), folderPath, path);
+                                        folderItem = new FolderItem(StringUtils.getLastPathSegment(folderPath), folderPath, path);
                                         FolderListContent.addItem(folderItem);
                                     } else {
                                         // increase image numbers
@@ -181,8 +200,6 @@ public class ImageRecyclerViewFragment extends Fragment {
                 .subscribe(new Subscriber<ImageItem>() {
                     @Override
                     public void onCompleted() {
-                        Log.d(TAG, "onCompleted: ");
-
                         // folder list has been generated, don't generate it again
                         isFolderListGenerated = true;
                     }
@@ -194,14 +211,12 @@ public class ImageRecyclerViewFragment extends Fragment {
 
                     @Override
                     public void onNext(ImageItem imageItem) {
-                        Log.d(TAG, "onNext: " + imageItem.toString());
+//                        Log.d(TAG, "onNext: " + imageItem.toString());
                         ImageListContent.addItem(imageItem);
                         recyclerView.getAdapter().notifyDataSetChanged();
                     }
                 });
-
     }
-
 
     @Override
     public void onAttach(Context context) {

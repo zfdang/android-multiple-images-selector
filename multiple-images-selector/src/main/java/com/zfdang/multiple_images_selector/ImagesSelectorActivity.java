@@ -7,16 +7,25 @@ import android.support.v7.app.AppCompatActivity;
 import com.zfdang.multiple_images_selector.models.FolderItem;
 import com.zfdang.multiple_images_selector.models.ImageItem;
 
-public class ImagesSelectorActivity extends AppCompatActivity implements OnImageRecyclerViewInteractionListener, OnFolderRecyclerViewInteractionListener {
+public class ImagesSelectorActivity extends AppCompatActivity
+        implements OnImageRecyclerViewInteractionListener, OnFolderRecyclerViewInteractionListener{
+
+    private ImageRecyclerViewFragment imagesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images_selector);
 
-        ImageRecyclerViewFragment gridFragment = ImageRecyclerViewFragment.newInstance(3);
+        imagesFragment = ImageRecyclerViewFragment.newInstance(3);
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.selector_content, gridFragment).commit();
+        fm.beginTransaction().replace(R.id.selector_content, imagesFragment).commit();
+    }
+
+    @Override
+    public void onFolderItemInteraction(FolderItem item) {
+        // call fragment to hide popupwindow, and refresh images list
+        imagesFragment.OnFolderChange();
     }
 
     @Override
@@ -24,8 +33,4 @@ public class ImagesSelectorActivity extends AppCompatActivity implements OnImage
 
     }
 
-    @Override
-    public void onFolderItemInteraction(FolderItem item) {
-
-    }
 }

@@ -2,6 +2,7 @@ package com.zfdang.multiple_images_selector;
 
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
+                    Log.d(TAG, "onClick: " + holder.mItem.toString());
                     mListener.onImageItemInteraction(holder.mItem);
                 }
             }
