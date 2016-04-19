@@ -4,6 +4,7 @@ import android.util.Log;
 
 public class ImageItem {
     private static final String TAG = "ImageItem";
+    public static final String CAMERA_PATH = "Camera";
 
     public String path;
     public String name;
