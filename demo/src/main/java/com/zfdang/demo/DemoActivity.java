@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.zfdang.multiple_images_selector.ImagesSelectorActivity;
 import com.zfdang.multiple_images_selector.SelectorSettings;
@@ -14,7 +15,8 @@ import java.util.ArrayList;
 public class DemoActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 732;
-    private ArrayList<String> mPhotos = new ArrayList<>();
+    private TextView tvResults;
+    private ArrayList<String> mResults = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,17 +31,26 @@ public class DemoActivity extends AppCompatActivity {
                 Intent intent = new Intent(DemoActivity.this, ImagesSelectorActivity.class);
                 intent.putExtra(SelectorSettings.SELECTOR_MAX_IMAGE_NUMBER, 5);
                 intent.putExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, false);
-                intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mPhotos);
+                intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mResults);
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
+
+        tvResults = (TextView) findViewById(R.id.results);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                // DO Things here
+                // get selected results here
+                mResults = data.getStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS);
+                StringBuffer sb = new StringBuffer();
+                sb.append(String.format("Totally %d images selected", mResults.size())).append("\n");
+                for(String result : mResults) {
+                    sb.append(result).append("\n");
+                }
+                tvResults.setText(sb.toString());
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

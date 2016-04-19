@@ -68,6 +68,11 @@ public class ImagesSelectorActivity extends AppCompatActivity
         Intent intent = getIntent();
         SelectorSettings.mMaxImageNumber = intent.getIntExtra(SelectorSettings.SELECTOR_MAX_IMAGE_NUMBER, SelectorSettings.mMaxImageNumber);
         SelectorSettings.isShowCamera = intent.getBooleanExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, SelectorSettings.isShowCamera);
+        ArrayList<String> selected = intent.getStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST);
+        if(selected != null && selected.size() > 0) {
+            ImageListContent.SELECTED_IMAGES.clear();
+            ImageListContent.SELECTED_IMAGES.addAll(selected);
+        }
 
         // initialize widgets in custom actionbar
         mButtonBack = (ImageView) findViewById(R.id.selector_button_back);
@@ -263,7 +268,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
             finish();
         } else if(v == mButtonConfirm) {
             Intent data = new Intent();
-            data.putStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS, new ArrayList<String>());
+            data.putStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS, ImageListContent.SELECTED_IMAGES);
             setResult(Activity.RESULT_OK, data);
             finish();
         }

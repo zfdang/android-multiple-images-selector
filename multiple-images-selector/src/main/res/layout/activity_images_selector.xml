@@ -7,7 +7,7 @@
     <include
         layout="@layout/selector_custom_actionbar"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"/>
+        android:layout_height="@dimen/top_actionbar_height"/>
 
     <FrameLayout
         android:id="@+id/selector_content"
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="2dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginRight="10dp"
                 tools:listitem="@layout/recyclerview_image_item"/>
 
             <xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller

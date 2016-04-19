@@ -27,5 +27,14 @@
             android:layout_height="wrap_content"
             android:text="Select"
             android:id="@+id/button"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:text=""
+            android:id="@+id/results"
+            android:background="@color/accent_material_dark"/>
+
     </LinearLayout>
 </RelativeLayout>
