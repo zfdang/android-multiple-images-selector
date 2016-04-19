@@ -55,7 +55,10 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
             public void onClick(View v) {
                 Log.d(TAG, "onClick: " + holder.mItem.toString());
                 // pass the selected result to FolderListContent
+                int previousSelectedIndex = FolderListContent.selectedFolderIndex;
                 FolderListContent.setSelectedFolder(holder.mItem, position);
+                // we should notify previous item and current time to change
+                notifyItemChanged(previousSelectedIndex);
                 notifyItemChanged(position);
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
