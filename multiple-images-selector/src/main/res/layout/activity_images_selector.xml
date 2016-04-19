@@ -16,10 +16,10 @@
         android:layout_margin="0dp">
 
         <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="0dp"
-                        android:background="@android:color/black">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:background="@android:color/black">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/image_recycerview"

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal">
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal">
 
     <com.facebook.drawee.view.SimpleDraweeView
-        xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:id="@+id/image_drawee"
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
         android:layout_margin="2dp"
+        android:scaleType="centerCrop"
         fresco:placeholderImage="@drawable/default_image"
         fresco:placeholderImageScaleType="fitCenter"
         fresco:roundedCornerRadius="2dp"
@@ -18,19 +18,19 @@
         />
 
     <View
-        android:visibility="gone"
         android:id="@+id/image_mask"
-        android:background="#88000000"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="#88000000"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/image_checked"
-        android:layout_gravity="top|right"
-        android:layout_marginTop="5.5dp"
-        android:layout_marginRight="5.5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginRight="5.5dp"
+        android:layout_marginTop="5.5dp"
         android:src="@drawable/image_unselected"/>
 
 </FrameLayout>
