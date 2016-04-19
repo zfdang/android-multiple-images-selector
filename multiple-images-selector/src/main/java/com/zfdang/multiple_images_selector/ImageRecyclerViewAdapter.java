@@ -38,11 +38,11 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final ImageItem ii = mValues.get(position);
-        holder.mItem = ii;
+        final ImageItem imageItem = mValues.get(position);
+        holder.mItem = imageItem;
 
         Uri newURI;
-        File imageFile = new File(ii.path);
+        File imageFile = new File(imageItem.path);
         if (imageFile.exists()) {
             newURI = Uri.fromFile(imageFile);
         } else {
@@ -50,25 +50,23 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
         }
         DraweeUtils.showThumb(newURI, holder.mDrawee);
 
-        if(ImageListContent.isImageSelected(ii.path)) {
+        if(ImageListContent.isImageSelected(imageItem.path)) {
             holder.mMask.setVisibility(View.VISIBLE);
-            holder.mChecked.setVisibility(View.VISIBLE);
+            holder.mChecked.setImageResource(R.drawable.image_selected);
         } else {
             holder.mMask.setVisibility(View.GONE);
-            holder.mChecked.setVisibility(View.GONE);
+            holder.mChecked.setImageResource(R.drawable.image_unselected);
         }
-
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: " + holder.mItem.toString());
+                ImageListContent.toggleImageSelected(imageItem.path);
+                notifyItemChanged(position);
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    Log.d(TAG, "onClick: " + holder.mItem.toString());
-                    ImageListContent.toggleImageSelected(ii.path);
-                    notifyItemChanged(position);
-
                     mListener.onImageItemInteraction(holder.mItem);
                 }
             }

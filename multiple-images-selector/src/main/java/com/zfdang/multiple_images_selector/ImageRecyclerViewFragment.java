@@ -46,7 +46,7 @@ public class ImageRecyclerViewFragment extends Fragment{
     private OnImageRecyclerViewInteractionListener mListener;
     private OnFolderRecyclerViewInteractionListener mFolderListener;
 
-    private TextView mSelectedFolderHint;
+    private TextView mFolderSelectButton;
     private FolderPopupWindow mFolderPopupWindow;
     private RecyclerView recyclerView;
 
@@ -103,9 +103,9 @@ public class ImageRecyclerViewFragment extends Fragment{
         // popup windows will be anchored to this view
         mPopupAnchorView = view.findViewById(R.id.selector_footer);
 
-        mSelectedFolderHint = (TextView) view.findViewById(R.id.selector_image_folder_button);
-        mSelectedFolderHint.setText(R.string.select_folder_all);
-        mSelectedFolderHint.setOnClickListener(new View.OnClickListener() {
+        mFolderSelectButton = (TextView) view.findViewById(R.id.selector_image_folder_button);
+        mFolderSelectButton.setText(R.string.select_folder_all);
+        mFolderSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
 
@@ -142,7 +142,7 @@ public class ImageRecyclerViewFragment extends Fragment{
         String newFolderPath = folder.path;
         if( !newFolderPath.equals(this.currentFolderPath)) {
             this.currentFolderPath = newFolderPath;
-            mSelectedFolderHint.setText(folder.name);
+            mFolderSelectButton.setText(folder.name);
             ImageListContent.clear();
             recyclerView.getAdapter().notifyDataSetChanged();
             LoadFolderAndImages();

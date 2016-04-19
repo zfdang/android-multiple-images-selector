@@ -56,12 +56,12 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
                 Log.d(TAG, "onClick: " + holder.mItem.toString());
                 // pass the selected result to FolderListContent
                 FolderListContent.setSelectedFolder(holder.mItem, position);
+                notifyItemChanged(position);
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onFolderItemInteraction(holder.mItem);
                 }
-                notifyItemChanged(position);
             }
         });
     }
