@@ -61,7 +61,7 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
                     // fragment is attached to one) that an item has been selected.
                     mListener.onFolderItemInteraction(holder.mItem);
                 }
-                notifyDataSetChanged();
+                notifyItemChanged(position);
             }
         });
     }
