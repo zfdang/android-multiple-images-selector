@@ -69,6 +69,8 @@ public class ImagesSelectorActivity extends AppCompatActivity
         Intent intent = getIntent();
         SelectorSettings.mMaxImageNumber = intent.getIntExtra(SelectorSettings.SELECTOR_MAX_IMAGE_NUMBER, SelectorSettings.mMaxImageNumber);
         SelectorSettings.isShowCamera = intent.getBooleanExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, SelectorSettings.isShowCamera);
+        SelectorSettings.mMinImageSize = intent.getIntExtra(SelectorSettings.SELECTOR_MIN_IMAGE_SIZE, SelectorSettings.mMinImageSize);
+
         ArrayList<String> selected = intent.getStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST);
         ImageListContent.SELECTED_IMAGES.clear();
         if(selected != null && selected.size() > 0) {
@@ -173,7 +175,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
                         List<ImageItem> results = new ArrayList<>();
 
                         Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                        String where = MediaStore.Images.Media.SIZE + " > 10000";
+                        String where = MediaStore.Images.Media.SIZE + " > " + SelectorSettings.mMinImageSize;
                         if(currentFolderPath != null && currentFolderPath.length() > 0) {
                             where += " and " + MediaStore.Images.Media.DATA + " like '" + currentFolderPath + "/%'";
                             Log.d(TAG, "call: " + where);

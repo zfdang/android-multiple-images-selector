@@ -7,22 +7,28 @@ import java.util.ArrayList;
  */
 public class SelectorSettings {
     /**
-     * 最大图片选择次数，int类型
+     * max number of images to be selected
      */
     public static final String SELECTOR_MAX_IMAGE_NUMBER = "selector_max_image_number";
     public static int mMaxImageNumber = 9;
 
     /**
-     * 是否显示相机，boolean类型
+     * show camera
      */
     public static final String SELECTOR_SHOW_CAMERA = "selector_show_camera";
     public static boolean isShowCamera = true;
 
     /**
-     * 默认选择的数据集
+     * initial selected images, full path of images
      */
     public static final String SELECTOR_INITIAL_SELECTED_LIST = "selector_initial_selected_list";
     public static ArrayList<String> resultList = new ArrayList<>();
 
+    // results
     public static final String SELECTOR_RESULTS = "selector_results";
+
+    // it can be used to filter very small images (mainly icons)
+    public static int mMinImageSize = 50000;
+    public static final String SELECTOR_MIN_IMAGE_SIZE = "selector_min_image_size";
+
 }
