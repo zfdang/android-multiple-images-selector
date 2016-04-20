@@ -46,7 +46,7 @@ public class DemoActivity extends AppCompatActivity {
                 // get selected results here
                 mResults = data.getStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS);
                 StringBuffer sb = new StringBuffer();
-                sb.append(String.format("Totally %d images selected", mResults.size())).append("\n");
+                sb.append(String.format("Totally %d images selected:", mResults.size())).append("\n");
                 for(String result : mResults) {
                     sb.append(result).append("\n");
                 }

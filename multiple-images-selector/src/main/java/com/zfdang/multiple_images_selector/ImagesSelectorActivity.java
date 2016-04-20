@@ -70,8 +70,8 @@ public class ImagesSelectorActivity extends AppCompatActivity
         SelectorSettings.mMaxImageNumber = intent.getIntExtra(SelectorSettings.SELECTOR_MAX_IMAGE_NUMBER, SelectorSettings.mMaxImageNumber);
         SelectorSettings.isShowCamera = intent.getBooleanExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, SelectorSettings.isShowCamera);
         ArrayList<String> selected = intent.getStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST);
+        ImageListContent.SELECTED_IMAGES.clear();
         if(selected != null && selected.size() > 0) {
-            ImageListContent.SELECTED_IMAGES.clear();
             ImageListContent.SELECTED_IMAGES.addAll(selected);
         }
 
@@ -133,6 +133,8 @@ public class ImagesSelectorActivity extends AppCompatActivity
         currentFolderPath = "";
         FolderListContent.clear();
         ImageListContent.clear();
+
+        updateDoneButton();
 
         LoadFolderAndImages();
     }
@@ -220,9 +222,8 @@ public class ImagesSelectorActivity extends AppCompatActivity
                                     }
                                 } // if(!isFolderListGenerated) {
                             } while (cursor.moveToNext());
-                        }
-
-                        cursor.close();
+                            cursor.close();
+                        } // } else if (cursor.moveToFirst()) {
                         return Observable.from(results);
                     }
                 })
@@ -250,6 +251,18 @@ public class ImagesSelectorActivity extends AppCompatActivity
     }
 
 
+    public void updateDoneButton() {
+        if(ImageListContent.SELECTED_IMAGES.size() == 0) {
+            mButtonConfirm.setEnabled(false);
+        } else {
+            mButtonConfirm.setEnabled(true);
+        }
+
+        String caption = String.format(getResources().getString(R.string.selector_action_done),
+                ImageListContent.SELECTED_IMAGES.size(), SelectorSettings.mMaxImageNumber);
+        mButtonConfirm.setText(caption);
+    }
+
     @Override
     public void onFolderItemInteraction(FolderItem item) {
         // call fragment to hide popupwindow, and refresh images list
@@ -263,9 +276,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
             Toast.makeText(ImagesSelectorActivity.this, hint, Toast.LENGTH_SHORT).show();
             ImageListContent.bReachMaxNumber = false;
         }
-
-        Log.d(TAG, "onImageItemInteraction: ");
-
+        updateDoneButton();
     }
 
     @Override
