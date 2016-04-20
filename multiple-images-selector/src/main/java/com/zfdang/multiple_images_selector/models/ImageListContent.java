@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImageListContent {
+    // ImageRecyclerViewAdapter.OnClick will set it to true
+    // Activity.OnImageInteraction will show the alert, and set it to false
+    public static boolean bReachMaxNumber = false;
 
     public static final List<ImageItem> IMAGES = new ArrayList<ImageItem>();
 

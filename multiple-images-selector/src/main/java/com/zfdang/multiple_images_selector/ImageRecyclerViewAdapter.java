@@ -62,8 +62,20 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: " + holder.mItem.toString());
-                ImageListContent.toggleImageSelected(imageItem.path);
-                notifyItemChanged(position);
+                if(!ImageListContent.isImageSelected(imageItem.path)) {
+                    // just select one new image, make sure total number is ok
+                    if(ImageListContent.SELECTED_IMAGES.size() < SelectorSettings.mMaxImageNumber) {
+                        ImageListContent.toggleImageSelected(imageItem.path);
+                        notifyItemChanged(position);
+                    } else {
+                        // set flag
+                        ImageListContent.bReachMaxNumber = true;
+                    }
+                } else {
+                    // deselect
+                    ImageListContent.toggleImageSelected(imageItem.path);
+                    notifyItemChanged(position);
+                }
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.

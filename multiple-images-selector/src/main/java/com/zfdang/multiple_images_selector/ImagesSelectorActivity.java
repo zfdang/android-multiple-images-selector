@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zfdang.multiple_images_selector.models.FolderItem;
 import com.zfdang.multiple_images_selector.models.FolderListContent;
@@ -106,7 +107,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
 
         // initialize buttons in footer
         mFolderSelectButton = (TextView) findViewById(R.id.selector_image_folder_button);
-        mFolderSelectButton.setText(R.string.select_folder_all);
+        mFolderSelectButton.setText(R.string.selector_folder_all);
         mFolderSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -199,7 +200,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
                                     if(FolderListContent.FOLDERS.size() == 0) {
                                         // add folder for all image
                                         FolderListContent.selectedFolderIndex = 0;
-                                        allFolderItem = new FolderItem(getString(R.string.select_folder_all), "", path);
+                                        allFolderItem = new FolderItem(getString(R.string.selector_folder_all), "", path);
                                         FolderListContent.addItem(allFolderItem);
                                     } else if (allFolderItem != null) {
                                         // "All Image" selection exists, increase its counter
@@ -257,6 +258,12 @@ public class ImagesSelectorActivity extends AppCompatActivity
 
     @Override
     public void onImageItemInteraction(ImageItem item) {
+        if(ImageListContent.bReachMaxNumber) {
+            String hint = String.format(getResources().getString(R.string.selector_reach_max_image_hint), SelectorSettings.mMaxImageNumber);
+            Toast.makeText(ImagesSelectorActivity.this, hint, Toast.LENGTH_SHORT).show();
+            ImageListContent.bReachMaxNumber = false;
+        }
+
         Log.d(TAG, "onImageItemInteraction: ");
 
     }

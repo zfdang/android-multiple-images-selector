@@ -60,7 +60,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:singleLine="true"
-                    android:text="@string/select_folder_all"
+                    android:text="@string/selector_folder_all"
                     android:textColor="@color/folder_text_color"
                     android:textSize="16sp"/>
 

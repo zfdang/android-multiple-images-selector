@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">Multiple-Images-Selector</string>
-    <string name="select_folder_all">所有图片</string>
+    <string name="selector_folder_all">所有图片</string>
     <string name="selector_caption">选择图片</string>
     <string name="selector_action_done">完成</string>
     <string name="selector_preview">预览</string>
+
+    <string name="selector_reach_max_image_hint">您已经选择%d张图片了!</string>
 </resources>
