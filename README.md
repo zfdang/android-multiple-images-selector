@@ -1,14 +1,25 @@
-# android-multiple-images-selector
+# Android Multiple Images Selector
 
-one easy-to-use selector to select images in Android application
+Easy-to-use selector to select images in Android application
+
+NOTE: this library depends on Fresco / rxjava. 
+
+# How does it work
+![Demo](demo.gif)
+
 
 # How to use this library in your application
 
-## 1. include this in gradle
+## 1. import "multiple-images-selector" as module into your project
+
+adding to jcenter in progress
+
 ## 2. Initialize Fresco in your application
 Permission & Application:
 
-	<uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
     	 ...
         android:name=".DemoApplication"
@@ -35,17 +46,38 @@ Intialization:
  
 
 
-## 3. Launch images selector by:
+## 3. Launch images selector:
 
-	Intent intent = new Intent(DemoActivity.this, ImagesSelectorActivity.class);
-	startActivityForResult(intent, REQUEST_CODE);
+    // start multiple photos selector
+    Intent intent = new Intent(DemoActivity.this, ImagesSelectorActivity.class);
+    // max number of images to be selected
+    intent.putExtra(SelectorSettings.SELECTOR_MAX_IMAGE_NUMBER, 5);
+    // min size of image which will be shown; to filter tiny images (mainly icons)
+    intent.putExtra(SelectorSettings.SELECTOR_MIN_IMAGE_SIZE, 100000);
+    // show camera or not
+    intent.putExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, false);
+    // pass current selected images as the initial value
+    intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mResults);
+    // start the selector
+    startActivityForResult(intent, REQUEST_CODE);
 
 
 ## 4. get results by
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // get selected images from selector
         if(requestCode == REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                // DO Things here
+                mResults = data.getStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS);
+                assert mResults != null;
+
+                // show results in textview
+                StringBuffer sb = new StringBuffer();
+                sb.append(String.format("Totally %d images selected:", mResults.size())).append("\n");
+                for(String result : mResults) {
+                    sb.append(result).append("\n");
+                }
+                tvResults.setText(sb.toString());
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -53,5 +85,15 @@ Intialization:
 
 
 ## 5. Customizations:
+
+    // max number of images to be selected
+    intent.putExtra(SelectorSettings.SELECTOR_MAX_IMAGE_NUMBER, 5);
+    // min size of image which will be shown; to filter tiny images (mainly icons)
+    intent.putExtra(SelectorSettings.SELECTOR_MIN_IMAGE_SIZE, 100000);
+    // show camera or not
+    intent.putExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, false);
+    // pass current selected images as the initial value
+    intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mResults);
+
 
 # Copyright
