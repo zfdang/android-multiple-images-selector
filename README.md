@@ -12,8 +12,8 @@ Features:
 
 NOTE: this library depends on Fresco / rxjava. 
 
-# How does it work
-![Demo](demo.gif)
+# How does it work (GIF)
+![Demo](http://multiple-images-selector.zfdang.com/demo.gif)
 
 
 # How to use this library in your application
