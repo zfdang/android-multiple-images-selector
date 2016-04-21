@@ -2,7 +2,6 @@ package com.zfdang.multiple_images_selector;
 
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +60,7 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: " + holder.mItem.toString());
+                // Log.d(TAG, "onClick: " + holder.mItem.toString());
                 if(!ImageListContent.isImageSelected(imageItem.path)) {
                     // just select one new image, make sure total number is ok
                     if(ImageListContent.SELECTED_IMAGES.size() < SelectorSettings.mMaxImageNumber) {

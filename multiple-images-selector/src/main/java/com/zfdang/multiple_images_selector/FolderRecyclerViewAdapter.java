@@ -2,7 +2,6 @@ package com.zfdang.multiple_images_selector;
 
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +52,7 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: " + holder.mItem.toString());
+                // Log.d(TAG, "onClick: " + holder.mItem.toString());
                 // pass the selected result to FolderListContent
                 int previousSelectedIndex = FolderListContent.selectedFolderIndex;
                 FolderListContent.setSelectedFolder(holder.mItem, position);
