@@ -1,6 +1,14 @@
 # Android Multiple Images Selector
 
-Easy-to-use selector to select images in Android application
+Easy-to-use library to select images in Android application
+
+Features:
+
+* select images by folders
+* support to set max number of images to be selected
+* allow filter images with tiny size (configurable)
+* fast scroll of image list
+* support Chinese / English
 
 NOTE: this library depends on Fresco / rxjava. 
 
