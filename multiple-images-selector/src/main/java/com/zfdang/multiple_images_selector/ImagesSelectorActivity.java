@@ -260,8 +260,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
             mButtonConfirm.setEnabled(true);
         }
 
-        String caption = String.format(getResources().getString(R.string.selector_action_done),
-                ImageListContent.SELECTED_IMAGES.size(), SelectorSettings.mMaxImageNumber);
+        String caption = getResources().getString(R.string.selector_action_done, ImageListContent.SELECTED_IMAGES.size(), SelectorSettings.mMaxImageNumber);
         mButtonConfirm.setText(caption);
     }
 
