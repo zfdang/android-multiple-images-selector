@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -64,6 +65,12 @@ public class ImagesSelectorActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images_selector);
+
+        // hide actionbar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.hide();
+        }
 
         // get parameters from bundle
         Intent intent = getIntent();
@@ -245,7 +252,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
 
                     @Override
                     public void onNext(ImageItem imageItem) {
-                        Log.d(TAG, "onNext: " + imageItem.toString());
+                        // Log.d(TAG, "onNext: " + imageItem.toString());
                         ImageListContent.addItem(imageItem);
                         recyclerView.getAdapter().notifyDataSetChanged();
                     }
