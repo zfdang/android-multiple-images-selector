@@ -119,4 +119,6 @@ Application intialization:
     intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mResults);
 
 
-# Copyright
+# License
+
+Multiple-Images-Selector is [MIT-licensed](LICENSE).
