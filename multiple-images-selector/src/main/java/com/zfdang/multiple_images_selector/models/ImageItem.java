@@ -2,6 +2,8 @@ package com.zfdang.multiple_images_selector.models;
 
 import android.util.Log;
 
+import com.zfdang.multiple_images_selector.SelectorSettings;
+
 public class ImageItem {
     private static final String TAG = "ImageItem";
     public static final String CAMERA_PATH = "Camera";
@@ -14,6 +16,11 @@ public class ImageItem {
         this.name = name;
         this.path = path;
         this.time = time;
+    }
+
+
+    public boolean isCamera() {
+        return this.path.equals(SelectorSettings.CAMERA_ITEM_PATH);
     }
 
     @Override

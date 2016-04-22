@@ -35,7 +35,7 @@ public class DemoActivity extends AppCompatActivity {
                 // min size of image which will be shown; to filter tiny images (mainly icons)
                 intent.putExtra(SelectorSettings.SELECTOR_MIN_IMAGE_SIZE, 100000);
                 // show camera or not
-                intent.putExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, false);
+                intent.putExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, true);
                 // pass current selected images as the initial value
                 intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mResults);
                 // start the selector
@@ -55,7 +55,7 @@ public class DemoActivity extends AppCompatActivity {
                 assert mResults != null;
 
                 // show results in textview
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 sb.append(String.format("Totally %d images selected:", mResults.size())).append("\n");
                 for(String result : mResults) {
                     sb.append(result).append("\n");

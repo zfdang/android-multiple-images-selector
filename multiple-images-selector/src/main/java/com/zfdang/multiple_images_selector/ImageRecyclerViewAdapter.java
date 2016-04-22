@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.zfdang.multiple_images_selector.models.ImageItem;
@@ -41,39 +42,57 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
         holder.mItem = imageItem;
 
         Uri newURI;
-        File imageFile = new File(imageItem.path);
-        if (imageFile.exists()) {
-            newURI = Uri.fromFile(imageFile);
-        } else {
-            newURI = FileUtils.getUriByResId(R.drawable.default_image);
-        }
-        DraweeUtils.showThumb(newURI, holder.mDrawee);
+        if (!imageItem.isCamera()) {
+            // draw image first
+            File imageFile = new File(imageItem.path);
+            if (imageFile.exists()) {
+                newURI = Uri.fromFile(imageFile);
+            } else {
+                newURI = FileUtils.getUriByResId(R.drawable.default_image);
+            }
+            DraweeUtils.showThumb(newURI, holder.mDrawee);
 
-        if(ImageListContent.isImageSelected(imageItem.path)) {
-            holder.mMask.setVisibility(View.VISIBLE);
-            holder.mChecked.setImageResource(R.drawable.image_selected);
+            holder.mImageName.setVisibility(View.GONE);
+            holder.mChecked.setVisibility(View.VISIBLE);
+            if (ImageListContent.isImageSelected(imageItem.path)) {
+                holder.mMask.setVisibility(View.VISIBLE);
+                holder.mChecked.setImageResource(R.drawable.image_selected);
+            } else {
+                holder.mMask.setVisibility(View.GONE);
+                holder.mChecked.setImageResource(R.drawable.image_unselected);
+            }
         } else {
+            // camera icon, not normal image
+            newURI = FileUtils.getUriByResId(R.drawable.ic_photo_camera_white_48dp);
+            DraweeUtils.showThumb(newURI, holder.mDrawee);
+
+            holder.mImageName.setVisibility(View.VISIBLE);
+            holder.mChecked.setVisibility(View.GONE);
             holder.mMask.setVisibility(View.GONE);
-            holder.mChecked.setImageResource(R.drawable.image_unselected);
         }
+
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Log.d(TAG, "onClick: " + holder.mItem.toString());
-                if(!ImageListContent.isImageSelected(imageItem.path)) {
-                    // just select one new image, make sure total number is ok
-                    if(ImageListContent.SELECTED_IMAGES.size() < SelectorSettings.mMaxImageNumber) {
+                if(!holder.mItem.isCamera()) {
+                    if(!ImageListContent.isImageSelected(imageItem.path)) {
+                        // just select one new image, make sure total number is ok
+                        if(ImageListContent.SELECTED_IMAGES.size() < SelectorSettings.mMaxImageNumber) {
+                            ImageListContent.toggleImageSelected(imageItem.path);
+                            notifyItemChanged(position);
+                        } else {
+                            // set flag
+                            ImageListContent.bReachMaxNumber = true;
+                        }
+                    } else {
+                        // deselect
                         ImageListContent.toggleImageSelected(imageItem.path);
                         notifyItemChanged(position);
-                    } else {
-                        // set flag
-                        ImageListContent.bReachMaxNumber = true;
                     }
                 } else {
-                    // deselect
-                    ImageListContent.toggleImageSelected(imageItem.path);
-                    notifyItemChanged(position);
+                    // do nothing here, listener will launch camera to capture image
                 }
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
@@ -95,6 +114,7 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
         public final ImageView mChecked;
         public final View mMask;
         public ImageItem mItem;
+        public TextView mImageName;
 
         public ViewHolder(View view) {
             super(view);
@@ -105,6 +125,8 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
             assert mMask != null;
             mChecked = (ImageView) view.findViewById(R.id.image_checked);
             assert mChecked != null;
+            mImageName = (TextView) view.findViewById(R.id.image_name);
+            assert mImageName != null;
         }
 
         @Override

@@ -5,23 +5,21 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
 
 import static android.os.Environment.MEDIA_MOUNTED;
 
-/**
- * 文件操作类
- * Created by Nereo on 2015/4/8.
- */
 public class FileUtils {
 
-    private static final String JPEG_FILE_PREFIX = "IMG_";
+    private static final String JPEG_FILE_PREFIX = "IMG";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
+    private static final String TAG = "FileUtils";
 
     public static File createTmpFile(Context context) throws IOException{
-        File dir = null;
+        File dir;
         if(TextUtils.equals(Environment.getExternalStorageState(), Environment.MEDIA_MOUNTED)) {
             dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
             if (!dir.exists()) {
@@ -81,7 +79,7 @@ public class FileUtils {
             appCacheDir = context.getCacheDir();
         }
         if (appCacheDir == null) {
-            String cacheDirPath = "/data/data/" + context.getPackageName() + "/cache/";
+            String cacheDirPath = context.getFilesDir().getPath() + context.getPackageName() + "/cache/";
             appCacheDir = new File(cacheDirPath);
         }
         return appCacheDir;
@@ -117,6 +115,7 @@ public class FileUtils {
             try {
                 new File(appCacheDir, ".nomedia").createNewFile();
             } catch (IOException e) {
+                Log.d(TAG, "getExternalCacheDir: " + Log.getStackTraceString(e));
             }
         }
         return appCacheDir;
@@ -129,12 +128,6 @@ public class FileUtils {
 
     public static Uri getUriByResId(int resId) {
         // 增加对资源id类型的图片类型判断
-//        BitmapFactory.Options opts = new BitmapFactory.Options();
-//        opts.inJustDecodeBounds = true;
-//        BitmapFactory.decodeResource(getResources(), resId, opts);
-//        if (opts.outMimeType.equals("image/png")) {
-//            mImageFormat = ImageFormat.PNG;
-//        }
         return new Uri.Builder().scheme("res").path(String.valueOf(resId)).build();
     }
 

@@ -17,6 +17,7 @@ public class SelectorSettings {
      */
     public static final String SELECTOR_SHOW_CAMERA = "selector_show_camera";
     public static boolean isShowCamera = true;
+    public static final String CAMERA_ITEM_PATH = "/CAMERA/CAMERA";
 
     /**
      * initial selected images, full path of images
@@ -30,5 +31,4 @@ public class SelectorSettings {
     // it can be used to filter very small images (mainly icons)
     public static int mMinImageSize = 50000;
     public static final String SELECTOR_MIN_IMAGE_SIZE = "selector_min_image_size";
-
 }

@@ -6,4 +6,8 @@
     <string name="selector_preview">Preview</string>
 
     <string name="selector_reach_max_image_hint">You have selected %d image already!</string>
+    <string name="tip_take_photo">Take Photo</string>
+    <string name="msg_no_camera">Can\'t Launch Camera!</string>
+    <string name="camera_temp_file_error">Temp File Error!</string>
+
 </resources>

@@ -28,9 +28,19 @@
         android:id="@+id/image_checked"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
+        android:layout_gravity="top|end"
         android:layout_marginRight="5.5dp"
         android:layout_marginTop="5.5dp"
         android:src="@drawable/image_unselected"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="@string/tip_take_photo"
+        android:id="@+id/image_name"
+        android:textColor="@color/white"
+        android:layout_gravity="bottom|center_horizontal"
+        />
 
 </FrameLayout>

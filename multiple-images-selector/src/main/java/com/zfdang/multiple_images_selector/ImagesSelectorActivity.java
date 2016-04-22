@@ -25,9 +25,11 @@ import com.zfdang.multiple_images_selector.models.FolderItem;
 import com.zfdang.multiple_images_selector.models.FolderListContent;
 import com.zfdang.multiple_images_selector.models.ImageItem;
 import com.zfdang.multiple_images_selector.models.ImageListContent;
+import com.zfdang.multiple_images_selector.utilities.FileUtils;
 import com.zfdang.multiple_images_selector.utilities.StringUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +62,9 @@ public class ImagesSelectorActivity extends AppCompatActivity
     private boolean isFolderListGenerated;
     private String currentFolderPath;
     private ContentResolver contentResolver;
+
+    private File mTempImageFile;
+    private static final int CAMERA_REQUEST_CODE = 694;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +113,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
             // Connect the recycler to the scroller (to let the scroller scroll the list)
             fastScroller.setRecyclerView(recyclerView);
             // Connect the scroller to the recycler (to let the recycler scroll the scroller's handle)
-            recyclerView.setOnScrollListener(fastScroller.getOnScrollListener());
+            recyclerView.addOnScrollListener(fastScroller.getOnScrollListener());
         }
 
         // popup windows will be anchored to this view
@@ -130,10 +135,6 @@ public class ImagesSelectorActivity extends AppCompatActivity
                     mFolderPopupWindow.dismiss();
                 } else {
                     mFolderPopupWindow.showAtLocation(mPopupAnchorView, Gravity.BOTTOM, 10, 150);
-//                    int index = mFolderAdapter.getSelectIndex();
-                    int index = 0;
-                    index = index == 0 ? index : index - 1;
-//                    mFolderPopupWindow.getListView().setSelection(index);
                 }
             }
         });
@@ -186,6 +187,12 @@ public class ImagesSelectorActivity extends AppCompatActivity
                         if(currentFolderPath != null && currentFolderPath.length() > 0) {
                             where += " and " + MediaStore.Images.Media.DATA + " like '" + currentFolderPath + "/%'";
                             Log.d(TAG, "call: " + where);
+                        } else {
+                            // add camera icon only in "All Images" folder
+                            if(SelectorSettings.isShowCamera) {
+                                ImageItem imageItem = new ImageItem("", SelectorSettings.CAMERA_ITEM_PATH, 0);
+                                results.add(imageItem);
+                            }
                         }
                         String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
 
@@ -284,8 +291,65 @@ public class ImagesSelectorActivity extends AppCompatActivity
             Toast.makeText(ImagesSelectorActivity.this, hint, Toast.LENGTH_SHORT).show();
             ImageListContent.bReachMaxNumber = false;
         }
+
+        if(item.isCamera()) {
+            launchCamera();
+        }
+
         updateDoneButton();
     }
+
+
+    public void launchCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            // set the output file of camera
+            try {
+                mTempImageFile = FileUtils.createTmpFile(this);
+            } catch (IOException e) {
+                Log.e(TAG, "launchCamera: ", e);
+            }
+            if (mTempImageFile != null && mTempImageFile.exists()) {
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTempImageFile));
+                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+            } else {
+                Toast.makeText(this, R.string.camera_temp_file_error, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, R.string.msg_no_camera, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // after capturing image, return the image path as selected result
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (mTempImageFile != null) {
+                    // notify system
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(mTempImageFile)));
+
+                    Intent resultIntent = new Intent();
+                    ImageListContent.clear();
+                    ImageListContent.SELECTED_IMAGES.add(mTempImageFile.getAbsolutePath());
+                    resultIntent.putStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS, ImageListContent.SELECTED_IMAGES);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                }
+            } else {
+                // if user click cancel, delete the temp file
+                while (mTempImageFile != null && mTempImageFile.exists()) {
+                    boolean success = mTempImageFile.delete();
+                    if (success) {
+                        mTempImageFile = null;
+                    }
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
