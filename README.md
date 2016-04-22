@@ -18,12 +18,27 @@ NOTE: this library depends on Fresco / rxjava.
 
 # How to use this library in your application
 
-## 1. import "multiple-images-selector" as module into your project
+## 1. add "multiple-images-selector" dependency
 
-adding to jcenter in progress
+Add the following repo to your list of repositories: (will be added to jcenter soon)
 
-## 2. Initialize Fresco in your application
-Permission & Application:
+	allprojects {
+    repositories {
+        jcenter()
+        maven {
+        	  name 'multiple-images-selector'
+            url 'http://dl.bintray.com/zfdang/android'
+        }
+   	 }
+	}
+
+Add "multiple-images-selector" as dependency:
+
+    compile 'com.zfdang.multiple-images-selector:multiple-images-selector:1.0.1'
+
+
+## 2. Initialize Fresco & Add selector activity in your app's manifest
+Permission & Application & Activity:
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -39,7 +54,7 @@ Permission & Application:
         
 	</application>
 
-Intialization:
+Application intialization:
 
 	public class DemoApplication extends Application
 	{
