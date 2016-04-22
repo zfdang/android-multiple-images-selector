@@ -8,6 +8,7 @@ Features:
 * support to set max number of images to be selected
 * allow filter images with tiny size (configurable)
 * fast scroll of image list
+* support to capture images from camera
 * support Chinese / English
 
 NOTE: this library depends on Fresco / rxjava. 
@@ -32,7 +33,10 @@ Permission & Application & Activity:
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <!--the following two permissions are required if you want to take photo in selector-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
     <application
     	 ...
         android:name=".DemoApplication"
@@ -68,7 +72,7 @@ Application intialization:
     // min size of image which will be shown; to filter tiny images (mainly icons)
     intent.putExtra(SelectorSettings.SELECTOR_MIN_IMAGE_SIZE, 100000);
     // show camera or not
-    intent.putExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, false);
+    intent.putExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, true);
     // pass current selected images as the initial value
     intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mResults);
     // start the selector
