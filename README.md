@@ -16,6 +16,7 @@ NOTE: this library depends on Fresco / rxjava.
 # How does it work (GIF)
 ![Demo](demo.gif)   ![Demo](capture.gif)
 
+Download demo apk here: [demo](multiple-images-selector-demo.apk)
 
 # How to use this library in your application
 
