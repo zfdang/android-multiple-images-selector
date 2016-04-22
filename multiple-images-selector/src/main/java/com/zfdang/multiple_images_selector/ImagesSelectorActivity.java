@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -58,8 +59,6 @@ public class ImagesSelectorActivity extends AppCompatActivity
     private TextView mFolderSelectButton;
     private FolderPopupWindow mFolderPopupWindow;
 
-    // flag to indicate whether we have generated folder list
-    private boolean isFolderListGenerated;
     private String currentFolderPath;
     private ContentResolver contentResolver;
 
@@ -139,7 +138,6 @@ public class ImagesSelectorActivity extends AppCompatActivity
             }
         });
 
-        isFolderListGenerated = false;
         currentFolderPath = "";
         FolderListContent.clear();
         ImageListContent.clear();
@@ -147,22 +145,6 @@ public class ImagesSelectorActivity extends AppCompatActivity
         updateDoneButton();
 
         LoadFolderAndImages();
-    }
-
-    public void OnFolderChange() {
-        mFolderPopupWindow.dismiss();
-
-        FolderItem folder = FolderListContent.getSelectedFolder();
-        String newFolderPath = folder.path;
-        if( !newFolderPath.equals(this.currentFolderPath)) {
-            this.currentFolderPath = newFolderPath;
-            mFolderSelectButton.setText(folder.name);
-            ImageListContent.clear();
-            recyclerView.getAdapter().notifyDataSetChanged();
-            LoadFolderAndImages();
-        } else {
-            Log.d(TAG, "OnFolderChange: " + "Same folder selected, skip loading.");
-        }
     }
 
     private final String[] projections = {
@@ -175,8 +157,8 @@ public class ImagesSelectorActivity extends AppCompatActivity
 
     // this method is to load images and folders for all
     public void LoadFolderAndImages() {
-        Log.d(TAG, "LoadFolderAndImages: " + "loading images for folder " + this.currentFolderPath);
-        Observable.just(this.currentFolderPath)
+        Log.d(TAG, "Load Folder And Images...");
+        Observable.just("")
                 .flatMap(new Func1<String, Observable<ImageItem>>() {
                     @Override
                     public Observable<ImageItem> call(String folder) {
@@ -184,16 +166,6 @@ public class ImagesSelectorActivity extends AppCompatActivity
 
                         Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
                         String where = MediaStore.Images.Media.SIZE + " > " + SelectorSettings.mMinImageSize;
-                        if(currentFolderPath != null && currentFolderPath.length() > 0) {
-                            where += " and " + MediaStore.Images.Media.DATA + " like '" + currentFolderPath + "/%'";
-                            Log.d(TAG, "call: " + where);
-                        } else {
-                            // add camera icon only in "All Images" folder
-                            if(SelectorSettings.isShowCamera) {
-                                ImageItem imageItem = new ImageItem("", SelectorSettings.CAMERA_ITEM_PATH, 0);
-                                results.add(imageItem);
-                            }
-                        }
                         String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
 
                         contentResolver = getContentResolver();
@@ -201,7 +173,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
                         if (cursor == null) {
                             Log.d(TAG, "call: " + "Empty images");
                         } else if (cursor.moveToFirst()) {
-                            FolderItem allFolderItem = null;
+                            FolderItem allImagesFolderItem = null;
                             int pathCol = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
                             int nameCol = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
                             int DateCol = cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED);
@@ -211,32 +183,38 @@ public class ImagesSelectorActivity extends AppCompatActivity
                                 long dateTime = cursor.getLong(DateCol);
 
                                 ImageItem item = new ImageItem(name, path, dateTime);
+
+                                // if FolderListContent is still empty, add "All Images" option
+                                if(FolderListContent.FOLDERS.size() == 0) {
+                                    // add folder for all image
+                                    FolderListContent.selectedFolderIndex = 0;
+
+                                    // use first image's path as cover image path
+                                    allImagesFolderItem = new FolderItem(getString(R.string.selector_folder_all), "", path);
+                                    FolderListContent.addItem(allImagesFolderItem);
+
+                                    // show camera icon ?
+                                    if(SelectorSettings.isShowCamera) {
+                                        results.add(ImageListContent.cameraItem);
+                                        allImagesFolderItem.addImageItem(ImageListContent.cameraItem);
+                                    }
+                                }
+
+                                // add image item here, make sure it appears after the camera icon
                                 results.add(item);
 
-                                if(!isFolderListGenerated) {
-                                    // if FolderListContent is still empty, add "All Images" option
-                                    if(FolderListContent.FOLDERS.size() == 0) {
-                                        // add folder for all image
-                                        FolderListContent.selectedFolderIndex = 0;
-                                        allFolderItem = new FolderItem(getString(R.string.selector_folder_all), "", path);
-                                        FolderListContent.addItem(allFolderItem);
-                                    } else if (allFolderItem != null) {
-                                        // "All Image" selection exists, increase its counter
-                                        allFolderItem.incNumOfImages();
-                                    }
+                                // add current image item to all
+                                allImagesFolderItem.addImageItem(item);
 
-                                    // find the path for this image, and add path to folderList if not existed
-                                    String folderPath = new File(path).getParentFile().getAbsolutePath();
-                                    FolderItem folderItem = FolderListContent.getItem(folderPath);
-                                    if (folderItem == null) {
-                                        // does not exist, create it
-                                        folderItem = new FolderItem(StringUtils.getLastPathSegment(folderPath), folderPath, path);
-                                        FolderListContent.addItem(folderItem);
-                                    } else {
-                                        // increase image numbers
-                                        folderItem.incNumOfImages();
-                                    }
-                                } // if(!isFolderListGenerated) {
+                                // find the parent folder for this image, and add path to folderList if not existed
+                                String folderPath = new File(path).getParentFile().getAbsolutePath();
+                                FolderItem folderItem = FolderListContent.getItem(folderPath);
+                                if (folderItem == null) {
+                                    // does not exist, create it
+                                    folderItem = new FolderItem(StringUtils.getLastPathSegment(folderPath), folderPath, path);
+                                    FolderListContent.addItem(folderItem);
+                                }
+                                folderItem.addImageItem(item);
                             } while (cursor.moveToNext());
                             cursor.close();
                         } // } else if (cursor.moveToFirst()) {
@@ -248,8 +226,6 @@ public class ImagesSelectorActivity extends AppCompatActivity
                 .subscribe(new Subscriber<ImageItem>() {
                     @Override
                     public void onCompleted() {
-                        // folder list has been generated, don't generate it again
-                        isFolderListGenerated = true;
                     }
 
                     @Override
@@ -261,11 +237,10 @@ public class ImagesSelectorActivity extends AppCompatActivity
                     public void onNext(ImageItem imageItem) {
                         // Log.d(TAG, "onNext: " + imageItem.toString());
                         ImageListContent.addItem(imageItem);
-                        recyclerView.getAdapter().notifyDataSetChanged();
+                        recyclerView.getAdapter().notifyItemChanged(ImageListContent.IMAGES.size()-1);
                     }
                 });
     }
-
 
     public void updateDoneButton() {
         if(ImageListContent.SELECTED_IMAGES.size() == 0) {
@@ -278,9 +253,26 @@ public class ImagesSelectorActivity extends AppCompatActivity
         mButtonConfirm.setText(caption);
     }
 
+    public void OnFolderChange() {
+        mFolderPopupWindow.dismiss();
+
+        FolderItem folder = FolderListContent.getSelectedFolder();
+        if( !TextUtils.equals(folder.path, this.currentFolderPath) ) {
+            this.currentFolderPath = folder.path;
+            mFolderSelectButton.setText(folder.name);
+
+            ImageListContent.IMAGES.clear();
+            ImageListContent.IMAGES.addAll(folder.mImages);
+            recyclerView.getAdapter().notifyDataSetChanged();
+        } else {
+            Log.d(TAG, "OnFolderChange: " + "Same folder selected, skip loading.");
+        }
+    }
+
+
     @Override
     public void onFolderItemInteraction(FolderItem item) {
-        // call fragment to hide popupwindow, and refresh images list
+        // dismiss popup, and update image list if necessary
         OnFolderChange();
     }
 

@@ -10,8 +10,8 @@ public class FolderListContent {
     public static final List<FolderItem> FOLDERS = new ArrayList<FolderItem>();
     public static final Map<String, FolderItem> FOLDERS_MAP = new HashMap<>();
 
-    public static FolderItem selectedFolder;
     // used to locate item in popupwindow
+    public static FolderItem selectedFolder;
     public static int selectedFolderIndex;
 
     public static FolderItem getSelectedFolder() {

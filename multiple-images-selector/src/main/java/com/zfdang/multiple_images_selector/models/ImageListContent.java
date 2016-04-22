@@ -1,14 +1,15 @@
 package com.zfdang.multiple_images_selector.models;
 
+import com.zfdang.multiple_images_selector.SelectorSettings;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class ImageListContent {
     // ImageRecyclerViewAdapter.OnClick will set it to true
     // Activity.OnImageInteraction will show the alert, and set it to false
     public static boolean bReachMaxNumber = false;
 
-    public static final List<ImageItem> IMAGES = new ArrayList<ImageItem>();
+    public static final ArrayList<ImageItem> IMAGES = new ArrayList<ImageItem>();
 
     public static void clear()
     {
@@ -31,4 +32,6 @@ public class ImageListContent {
             SELECTED_IMAGES.add(filename);
         }
     }
+
+    public static final ImageItem cameraItem = new ImageItem("", SelectorSettings.CAMERA_ITEM_PATH, 0);
 }

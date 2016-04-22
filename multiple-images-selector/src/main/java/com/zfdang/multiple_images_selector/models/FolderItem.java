@@ -1,24 +1,25 @@
 package com.zfdang.multiple_images_selector.models;
 
+import java.util.ArrayList;
+
 public class FolderItem {
     public String name;
     public String path;
     public String coverImagePath;
-    public int numOfImages;
+    public ArrayList<ImageItem> mImages = new ArrayList<>();
 
     public FolderItem(String name, String path, String coverImagePath) {
         this.name = name;
         this.path = path;
         this.coverImagePath = coverImagePath;
-        this.numOfImages = 1;
     }
 
-    public void incNumOfImages() {
-        this.numOfImages += 1;
+    public void addImageItem(ImageItem imageItem) {
+        this.mImages.add(imageItem);
     }
 
     public String getNumOfImages() {
-        return String.format("%d", this.numOfImages);
+        return String.format("%d", mImages.size());
     }
 
     @Override
@@ -27,7 +28,7 @@ public class FolderItem {
                 "coverImagePath='" + coverImagePath + '\'' +
                 ", name='" + name + '\'' +
                 ", path='" + path + '\'' +
-                ", numOfImages=" + numOfImages +
+                ", numOfImages=" + mImages.size() +
                 '}';
     }
 }
