@@ -23,16 +23,16 @@ NOTE: this library depends on Fresco / rxjava.
 Add the following repo to your list of repositories: (will be added to jcenter soon)
 
 	allprojects {
-    repositories {
-        jcenter()
-        maven {
-        	  name 'multiple-images-selector'
-            url 'http://dl.bintray.com/zfdang/android'
-        }
-   	 }
+	    repositories {
+	        jcenter()
+	        maven {
+	            name 'multiple-images-selector'
+	            url 'http://dl.bintray.com/zfdang/android'
+	        }
+	    }
 	}
 
-Add "multiple-images-selector" as dependency:
+Add "multiple-images-selector" as dependency to your app:
 
     compile 'com.zfdang.multiple-images-selector:multiple-images-selector:1.0.1'
 
