@@ -5,10 +5,7 @@
     <string name="selector_action_done">Done (%1$d/%2$d)</string>
     <string name="selector_preview">Preview</string>
 
-    <plurals name="selector_reach_max_image_hint">
-        <item quantity="one">You have selected %d image already!</item>
-        <item quantity="other">You have selected %d images already!</item>
-    </plurals>
+    <string name="selector_reach_max_image_hint">You have selected %d images already!</string>
     <string name="tip_take_photo">Take Photo</string>
     <string name="msg_no_camera">Can\'t Launch Camera!</string>
     <string name="camera_temp_file_error">Temp File Error!</string>

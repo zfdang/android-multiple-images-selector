@@ -14,7 +14,7 @@ Features:
 NOTE: this library depends on Fresco / rxjava. 
 
 # How does it work (GIF)
-![Demo](http://multiple-images-selector.zfdang.com/demo.gif)
+![Demo](http://multiple-images-selector.zfdang.com/demo.gif) ![Demo](http://multiple-images-selector.zfdang.com/capture.gif)
 
 
 # How to use this library in your application
@@ -25,7 +25,7 @@ multiple-images-selector is now available in jcenter.
 
 Add "multiple-images-selector" as dependency to your app:
 
-    compile 'com.zfdang.multiple-images-selector:multiple-images-selector:1.0.1'
+    compile 'com.zfdang.multiple-images-selector:multiple-images-selector:1.1.0'
 
 
 ## 2. Initialize Fresco & Add selector activity in your app's manifest

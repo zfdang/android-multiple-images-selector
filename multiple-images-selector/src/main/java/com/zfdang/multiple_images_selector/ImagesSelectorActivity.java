@@ -287,7 +287,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
     @Override
     public void onImageItemInteraction(ImageItem item) {
         if(ImageListContent.bReachMaxNumber) {
-            String hint = String.format(getResources().getString(R.string.selector_reach_max_image_hint), SelectorSettings.mMaxImageNumber);
+            String hint = getResources().getString(R.string.selector_reach_max_image_hint, SelectorSettings.mMaxImageNumber);
             Toast.makeText(ImagesSelectorActivity.this, hint, Toast.LENGTH_SHORT).show();
             ImageListContent.bReachMaxNumber = false;
         }
