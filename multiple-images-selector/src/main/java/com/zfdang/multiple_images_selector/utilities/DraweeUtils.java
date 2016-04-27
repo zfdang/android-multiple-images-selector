@@ -26,6 +26,7 @@ public class DraweeUtils {
 
         DraweeController controller = Fresco.newDraweeControllerBuilder()
                 .setImageRequest(request)
+                .setAutoPlayAnimations(true)
                 .setOldController(draweeView.getController())
                 .setControllerListener(new BaseControllerListener<ImageInfo>())
                 .build();
