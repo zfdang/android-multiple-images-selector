@@ -67,6 +67,10 @@ Application intialization:
 
 ## 3. Launch images selector:
 
+	// class variables
+    private static final int REQUEST_CODE = 123;
+    private ArrayList<String> mResults = new ArrayList<>();
+
     // start multiple photos selector
     Intent intent = new Intent(DemoActivity.this, ImagesSelectorActivity.class);
     // max number of images to be selected
@@ -103,18 +107,17 @@ Application intialization:
     }
 
 
-## 5. Customizations:
 
-    // max number of images to be selected
-    intent.putExtra(SelectorSettings.SELECTOR_MAX_IMAGE_NUMBER, 5);
-    // min size of image which will be shown; to filter tiny images (mainly icons)
-    intent.putExtra(SelectorSettings.SELECTOR_MIN_IMAGE_SIZE, 100000);
-    // show camera or not
-    intent.putExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, false);
-    // pass current selected images as the initial value
-    intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mResults);
+## 5. Q&A:
+	android.view.InflateException: Binary XML file line #7: Binary XML file line #7: Error inflating class com.facebook.drawee.view.SimpleDraweeView
 
+Solution:	make sure you Fresco is initialized in app properly.
 
+	android:name=".DemoApplication"
+	...
+	Fresco.initialize(getApplicationContext());
+		
+	
 # License
 
 Multiple-Images-Selector is [MIT-licensed](LICENSE).
