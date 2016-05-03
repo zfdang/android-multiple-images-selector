@@ -45,4 +45,5 @@ dependencies {
 
 // https://github.com/blundell/release-android-library
 // or use the remote copy to keep update with latest changes
+// ./gradlew clean build generateRelease
 apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
