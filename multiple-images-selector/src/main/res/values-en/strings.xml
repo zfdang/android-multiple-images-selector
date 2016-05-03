@@ -10,4 +10,6 @@
     <string name="msg_no_camera">Can\'t Launch Camera!</string>
     <string name="camera_temp_file_error">Temp File Error!</string>
 
+    <string name="selector_permission_error">Permission rejected，failed to work properly！</string>
+
 </resources>

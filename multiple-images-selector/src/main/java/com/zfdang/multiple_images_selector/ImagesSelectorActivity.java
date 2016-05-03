@@ -1,13 +1,17 @@
 package com.zfdang.multiple_images_selector;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -46,6 +50,10 @@ public class ImagesSelectorActivity extends AppCompatActivity
 
     private static final String TAG = "ImageSelector";
     private static final String ARG_COLUMN_COUNT = "column-count";
+
+    private static final int MY_PERMISSIONS_REQUEST_STORAGE_CODE = 197;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA_CODE = 341;
+
     private int mColumnCount = 3;
 
     // custom action bars
@@ -144,7 +152,63 @@ public class ImagesSelectorActivity extends AppCompatActivity
 
         updateDoneButton();
 
-        LoadFolderAndImages();
+        requestReadStorageRuntimePermission();
+    }
+
+    public void requestReadStorageRuntimePermission() {
+        if (ContextCompat.checkSelfPermission(ImagesSelectorActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ImagesSelectorActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_STORAGE_CODE);
+        } else {
+            LoadFolderAndImages();
+        }
+    }
+
+
+    public void requestCameraRuntimePermissions() {
+        if (ContextCompat.checkSelfPermission(ImagesSelectorActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(ImagesSelectorActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(ImagesSelectorActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                    MY_PERMISSIONS_REQUEST_CAMERA_CODE);
+        } else {
+            launchCamera();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_STORAGE_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    LoadFolderAndImages();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(ImagesSelectorActivity.this, getString(R.string.selector_permission_error), Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            case MY_PERMISSIONS_REQUEST_CAMERA_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    launchCamera();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(ImagesSelectorActivity.this, getString(R.string.selector_permission_error), Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
     }
 
     private final String[] projections = {
@@ -285,7 +349,7 @@ public class ImagesSelectorActivity extends AppCompatActivity
         }
 
         if(item.isCamera()) {
-            launchCamera();
+            requestCameraRuntimePermissions();
         }
 
         updateDoneButton();
