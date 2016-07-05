@@ -126,7 +126,11 @@ Issue 2:
 	
 Solution: disable hardware acceleration for activity
 
-	android:hardwareAccelerated="false"
+	<activity
+        android:name="com.zfdang.multiple_images_selector.ImagesSelectorActivity"
+        android:hardwareAccelerated="false"
+        android:configChanges="orientation|screenSize"/>
+
 	
 # License
 
