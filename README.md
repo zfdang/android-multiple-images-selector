@@ -116,7 +116,13 @@ Solution:	make sure Fresco is initialized in app properly.
 	android:name=".DemoApplication"
 	...
 	Fresco.initialize(getApplicationContext());
-		
+	
+	App crash while loading large amount of images
+	
+Solution: disable hardware acceleration for activity
+
+	android:hardwareAccelerated="false"
+	
 	
 # License
 
