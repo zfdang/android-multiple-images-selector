@@ -109,6 +109,9 @@ Application intialization:
 
 
 ## 5. Q&A:
+
+Issue 1:	
+	
 	android.view.InflateException: Binary XML file line #7: Binary XML file line #7: Error inflating class com.facebook.drawee.view.SimpleDraweeView
 
 Solution:	make sure Fresco is initialized in app properly.
@@ -116,13 +119,14 @@ Solution:	make sure Fresco is initialized in app properly.
 	android:name=".DemoApplication"
 	...
 	Fresco.initialize(getApplicationContext());
+
+Issue 2:
 	
 	App crash while loading large amount of images
 	
 Solution: disable hardware acceleration for activity
 
 	android:hardwareAccelerated="false"
-	
 	
 # License
 
