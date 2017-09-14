@@ -347,9 +347,10 @@ public class ImagesSelectorActivity extends AppCompatActivity
             Toast.makeText(ImagesSelectorActivity.this, hint, Toast.LENGTH_SHORT).show();
             ImageListContent.bReachMaxNumber = false;
         }
-
-        if(item.isCamera()) {
-            requestCameraRuntimePermissions();
+        else {
+            if (item.isCamera()) {
+                requestCameraRuntimePermissions();
+            }
         }
 
         updateDoneButton();

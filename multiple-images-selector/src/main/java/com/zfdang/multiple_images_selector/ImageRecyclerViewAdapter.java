@@ -92,6 +92,9 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
                         notifyItemChanged(position);
                     }
                 } else {
+                    if(ImageListContent.SELECTED_IMAGES.size() == SelectorSettings.mMaxImageNumber) {
+                        ImageListContent.bReachMaxNumber = true;
+                    }
                     // do nothing here, listener will launch camera to capture image
                 }
                 if (null != mListener) {
