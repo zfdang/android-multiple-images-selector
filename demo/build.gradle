@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId "com.zfdang.multipleimagesselector"
-        minSdkVersion 15
-        targetSdkVersion 23
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
@@ -20,11 +20,20 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:design:23.3.0'
-    compile 'com.android.support:support-v4:23.3.0'
-    compile 'com.android.support:recyclerview-v7:23.3.0'
-    compile project(':multiple-images-selector')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    implementation "com.android.support:appcompat-v7:$rootProject.SUPPORT_LIBRARY_VERSION"
+    implementation "com.android.support:design:$rootProject.SUPPORT_LIBRARY_VERSION"
+    implementation "com.android.support:support-v4:$rootProject.SUPPORT_LIBRARY_VERSION"
+    implementation "com.android.support:recyclerview-v7:$rootProject.SUPPORT_LIBRARY_VERSION"
+    implementation project(':multiple-images-selector')
+
+    // Fresco
+    implementation "com.facebook.fresco:fresco:$rootProject.FRESCO_VERSION"
+    // For animated GIF support
+    implementation "com.facebook.fresco:animated-gif:$rootProject.FRESCO_VERSION"
+    // For WebP support, including animated WebP
+    implementation "com.facebook.fresco:webpsupport:$rootProject.FRESCO_VERSION"
+    implementation "com.facebook.fresco:animated-webp:$rootProject.FRESCO_VERSION"
+
 }

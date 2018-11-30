@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -33,16 +34,22 @@ import com.zfdang.multiple_images_selector.models.ImageListContent;
 import com.zfdang.multiple_images_selector.utilities.FileUtils;
 import com.zfdang.multiple_images_selector.utilities.StringUtils;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.internal.operators.observable.ObserverResourceWrapper;
+import io.reactivex.schedulers.Schedulers;
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 public class ImagesSelectorActivity extends AppCompatActivity
@@ -95,6 +102,10 @@ public class ImagesSelectorActivity extends AppCompatActivity
         if(selected != null && selected.size() > 0) {
             ImageListContent.SELECTED_IMAGES.addAll(selected);
         }
+
+        // https://stackoverflow.com/questions/41144898/android-camera-intent-fileuriexposedexception-for-sdk-24
+        StrictMode.VmPolicy.Builder newbuilder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(newbuilder.build());
 
         // initialize widgets in custom actionbar
         mButtonBack = (ImageView) findViewById(R.id.selector_button_back);
@@ -222,10 +233,11 @@ public class ImagesSelectorActivity extends AppCompatActivity
     // this method is to load images and folders for all
     public void LoadFolderAndImages() {
         Log.d(TAG, "Load Folder And Images...");
+
         Observable.just("")
-                .flatMap(new Func1<String, Observable<ImageItem>>() {
+                .flatMap(new Function<String, Observable<ImageItem>>() {
                     @Override
-                    public Observable<ImageItem> call(String folder) {
+                    public Observable<ImageItem> apply(String folder) throws Exception {
                         List<ImageItem> results = new ArrayList<>();
 
                         Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -282,14 +294,22 @@ public class ImagesSelectorActivity extends AppCompatActivity
                             } while (cursor.moveToNext());
                             cursor.close();
                         } // } else if (cursor.moveToFirst()) {
-                        return Observable.from(results);
+                        return Observable.fromIterable(results);
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ImageItem>() {
+                .subscribe(new Observer<ImageItem>() {
                     @Override
-                    public void onCompleted() {
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(ImageItem imageItem) {
+                        // Log.d(TAG, "onNext: " + imageItem.toString());
+                        ImageListContent.addItem(imageItem);
+                        recyclerView.getAdapter().notifyItemChanged(ImageListContent.IMAGES.size()-1);
                     }
 
                     @Override
@@ -298,10 +318,8 @@ public class ImagesSelectorActivity extends AppCompatActivity
                     }
 
                     @Override
-                    public void onNext(ImageItem imageItem) {
-                        // Log.d(TAG, "onNext: " + imageItem.toString());
-                        ImageListContent.addItem(imageItem);
-                        recyclerView.getAdapter().notifyItemChanged(ImageListContent.IMAGES.size()-1);
+                    public void onComplete() {
+
                     }
                 });
     }

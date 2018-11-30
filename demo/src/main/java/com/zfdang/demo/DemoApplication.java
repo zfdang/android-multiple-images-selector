@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
+
 /**
  * Created by zfdang on 2016-4-15.
  */
