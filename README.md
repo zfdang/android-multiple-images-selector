@@ -10,7 +10,7 @@ Features:
 * fast scroll of image list
 * support to capture images from camera
 * compitable with android 6.0
-* support Chinese / English
+* support Arabic / English
 
 NOTE: this library depends on Fresco / rxjava. 
 
