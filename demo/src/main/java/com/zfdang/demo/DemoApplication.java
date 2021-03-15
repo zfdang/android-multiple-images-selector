@@ -6,7 +6,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 
 
 /**
- * Created by zfdang on 2016-4-15.
+ * Created by bm on 2016-4-15.
  */
 public class DemoApplication extends Application
 {

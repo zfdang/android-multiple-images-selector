@@ -3,7 +3,7 @@ package com.zfdang.multiple_images_selector;
 import java.util.ArrayList;
 
 /**
- * Created by zfdang on 2016-4-18.
+ * Created by bm on 2021-3-15.
  */
 public class SelectorSettings {
     /**

@@ -27,7 +27,7 @@ multiple-images-selector is now available in jcenter.
 
 Add "multiple-images-selector" as dependency to your app:
 
-    compile 'com.zfdang.multiple-images-selector:multiple-images-selector:1.1.5'
+    implementation 'com.github.abora97:android-multiple-images-selector:v1.1.6'
 
 
 ## 2. Initialize Fresco & Add selector activity in your app's manifest

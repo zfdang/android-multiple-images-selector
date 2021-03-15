@@ -12,7 +12,7 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 /**
- * Created by zfdang on 2016-4-17.
+ * Created by bm on 2016-4-17.
  */
 public class DraweeUtils {
     private static String TAG = "DraweeUtils";

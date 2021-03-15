@@ -1,7 +1,7 @@
 package com.zfdang.multiple_images_selector.utilities;
 
 /**
- * Created by zfdang on 2016-4-17.
+ * Created by bm on 2016-4-17.
  */
 public class StringUtils {
     public static String getLastPathSegment(String content) {
