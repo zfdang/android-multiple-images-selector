@@ -3,13 +3,14 @@ package com.zfdang.multiple_images_selector;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.PopupWindow;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.zfdang.multiple_images_selector.models.FolderListContent;
 

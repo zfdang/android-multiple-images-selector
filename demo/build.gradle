@@ -22,10 +22,8 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    implementation "com.android.support:appcompat-v7:$rootProject.SUPPORT_LIBRARY_VERSION"
-    implementation "com.android.support:design:$rootProject.SUPPORT_LIBRARY_VERSION"
-    implementation "com.android.support:support-v4:$rootProject.SUPPORT_LIBRARY_VERSION"
-    implementation "com.android.support:recyclerview-v7:$rootProject.SUPPORT_LIBRARY_VERSION"
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+
     implementation project(':multiple-images-selector')
 
     // Fresco
@@ -35,5 +33,4 @@ dependencies {
     // For WebP support, including animated WebP
     implementation "com.facebook.fresco:webpsupport:$rootProject.FRESCO_VERSION"
     implementation "com.facebook.fresco:animated-webp:$rootProject.FRESCO_VERSION"
-
 }

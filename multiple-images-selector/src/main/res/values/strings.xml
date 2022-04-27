@@ -11,5 +11,6 @@
     <string name="camera_temp_file_error">图片错误</string>
 
     <string name="selector_permission_error">权限错误，无法正常工作！</string>
-
+    <string name="read_write_storage_rationale">需要存储读取权限</string>
+    <string name="camera_rationale">需要相机权限</string>
 </resources>
