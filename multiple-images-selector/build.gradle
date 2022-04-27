@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID = 'com.zfdang.multiple-images-selector'
     PUBLISH_ARTIFACT_ID = 'multiple-images-selector'
-    PUBLISH_VERSION = '1.1.5'
+    PUBLISH_VERSION = '1.2.0'
 }
 
 android {
@@ -52,7 +52,8 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 }
 
-// https://github.com/blundell/release-android-library
-// or use the remote copy to keep update with latest changes
+// https://github.com/hossein4bedi/release-android-library
+// to use the remote copy to keep update with latest changes
 // ./gradlew clean build generateRelease
-//apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
+apply from: 'https://raw.githubusercontent.com/hossein4bedi/release-android-library/master/android-release-aar.gradle'
+
